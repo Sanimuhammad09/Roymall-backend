@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roymall Scents API Developer Portal</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Swagger UI CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+  
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #161b26;
+      --bg-tertiary: #1f2638;
+      --accent: #8b5cf6; /* premium violet */
+      --accent-glow: rgba(139, 92, 246, 0.4);
+      --accent-gradient: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: #2e374a;
+      --glass-bg: rgba(22, 27, 38, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Premium Header */
+    header {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 2.2rem;
+      height: 2.2rem;
+      background: var(--accent-gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .brand-icon svg {
+      width: 1.2rem;
+      height: 1.2rem;
+      fill: #fff;
+    }
+
+    .brand-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Portal Navigation / Tabs */
+    .tabs {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.3rem;
+      border-radius: 99px;
+      border: 1px solid var(--border-color);
+      gap: 0.25rem;
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 0.5rem 1.25rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 99px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: var(--accent-gradient);
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 0.4rem 0.8rem;
+      border-radius: 99px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .btn-download {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-download:hover {
+      background: var(--border-color);
+      border-color: var(--text-muted);
+    }
+
+    /* Content Area */
+    main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab-content {
+      display: none;
+      width: 100%;
+      height: 100%;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Redoc styling tweaks */
+    #redoc-container {
+      background-color: #ffffff;
+      color: #333333;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Swagger UI Dark Mode overrides */
+    #swagger-ui-container {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      background: var(--bg-primary);
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Customize Swagger UI to look darker and sleek */
+    .swagger-ui {
+      filter: invert(88%) hue-rotate(180deg);
+    }
+    .swagger-ui .info, .swagger-ui .scheme-container, .swagger-ui .opblock {
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 12px !important;
+    }
+    .swagger-ui .opblock {
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+    .swagger-ui input, .swagger-ui select, .swagger-ui textarea {
+      background: #f0f0f0 !important;
+      color: #000000 !important;
+      border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    }
+    .swagger-ui .dialog-ux .modal-ux {
+      background: #ffffff !important;
+    }
+    .swagger-ui .btn {
+      box-shadow: none !important;
+      border-radius: 6px !important;
+    }
+
+    /* JSON Spec Viewer */
+    .json-viewer-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .json-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .json-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .btn-copy {
+      background: var(--accent-gradient);
+      border: none;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy:hover {
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    pre code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: #38bdf8; /* beautiful sky blue coding color */
+      overflow-x: auto;
+      display: block;
+      max-height: 70vh;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Info Banner */
+    .info-banner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto 0 auto;
+      padding: 1.5rem;
+      background: rgba(139, 92, 246, 0.05);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      border-radius: 12px;
+    }
+
+    .info-card {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .info-card h4 {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .info-card p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .info-card code {
+      background: rgba(0,0,0,0.3);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #a78bfa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24">
+          <!-- Elegant Perfume Flask SVG -->
+          <path d="M12 2a2 2 0 0 1 2 2v2h2a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h2V4a2 2 0 0 1 2-2zm4 7H8a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V10a1 1 0 0 0-1-1zm-4 3a3 3 0 0 1 3 3v2a3 3 0 0 1-6 0v-2a3 3 0 0 1 3-3z"/>
+        </svg>
+      </div>
+      <div class="brand-details">
+        <span class="brand-name">Roymall Scents</span>
+        <span class="brand-sub">API Hub v1.0</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('redoc')">
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        Redoc View
+      </button>
+      <button class="tab-btn" onclick="switchTab('swagger')">
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Swagger Playground
+      </button>
+      <button class="tab-btn" onclick="switchTab('json')">
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+        OpenAPI Spec
+      </button>
+    </div>
+
+    <div class="actions">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        API Live
+      </div>
+      <a href="https://roymall-backend-production.up.railway.app/api/docs-json" target="_blank" class="btn-download">
+        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        JSON Spec
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Config Banner -->
+    <div id="info-banner" class="info-banner">
+      <div class="info-card">
+        <h4>Production Server</h4>
+        <p><code>https://roymall-backend-production.up.railway.app</code></p>
+      </div>
+      <div class="info-card">
+        <h4>Local Server</h4>
+        <p><code>http://localhost:4000</code></p>
+      </div>
+      <div class="info-card">
+        <h4>Authorization Scheme</h4>
+        <p>JWT Bearer Authorization (Header: <code>Authorization: Bearer &lt;Token&gt;</code>)</p>
+      </div>
+    </div>
+
+    <!-- Redoc Tab -->
+    <div id="redoc-tab" class="tab-content active">
+      <div id="redoc-container"></div>
+    </div>
+
+    <!-- Swagger Tab -->
+    <div id="swagger-tab" class="tab-content">
+      <div id="swagger-ui-container"></div>
+    </div>
+
+    <!-- Raw JSON Tab -->
+    <div id="json-tab" class="tab-content">
+      <div class="json-viewer-container">
+        <div class="json-header">
+          <span class="json-title">openapi.json</span>
+          <button class="btn-copy" onclick="copyJsonSpec()">Copy JSON</button>
+        </div>
+        <pre><code id="json-code">Loading specification...</code></pre>
+      </div>
+    </div>
+  </main>
+
+  <!-- Redoc Bundle -->
+  <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+  <!-- Swagger UI Bundle -->
+  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+
+  <script>
+    const specUrl = 'https://roymall-backend-production.up.railway.app/api/docs-json';
+    let loadedSpecData = null;
+
+    // Load spec data for the raw JSON viewer and other tools
+    fetch(specUrl)
+      .then(res => res.json())
+      .then(data => {
+        loadedSpecData = data;
+        document.getElementById('json-code').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        console.error('Error fetching OpenAPI spec:', err);
+        document.getElementById('json-code').textContent = 'Failed to load OpenAPI spec from railway production url.';
+      });
+
+    // Initialize Redoc
+    Redoc.init(specUrl, {
+      scrollYOffset: 70,
+      hideDownloadButton: true,
+      theme: {
+        colors: {
+          primary: {
+            main: '#8b5cf6'
+          }
+        },
+        typography: {
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          headings: {
+            fontFamily: "'Cabinet Grotesk', sans-serif"
+          }
+        }
+      }
+    }, document.getElementById('redoc-container'));
+
+    // Initialize Swagger UI
+    let swaggerUiInitialized = false;
+    function initSwaggerUI() {
+      if (swaggerUiInitialized) return;
+      SwaggerUIBundle({
+        url: specUrl,
+        dom_id: '#swagger-ui-container',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout"
+      });
+      swaggerUiInitialized = true;
+    }
+
+    // Switch Tabs
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      // Show target tab
+      if (tabName === 'redoc') {
+        document.getElementById('redoc-tab').classList.add('active');
+        document.getElementById('info-banner').style.display = 'flex';
+        document.querySelector("[onclick=\"switchTab('redoc')\"]").classList.add('active');
+      } else if (tabName === 'swagger') {
+        document.getElementById('swagger-tab').classList.add('active');
+        document.getElementById('info-banner').style.display = 'none'; // Swagger UI contains its own server descriptions
+        document.querySelector("[onclick=\"switchTab('swagger')\"]").classList.add('active');
+        initSwaggerUI();
+      } else if (tabName === 'json') {
+        document.getElementById('json-tab').classList.add('active');
+        document.getElementById('info-banner').style.display = 'flex';
+        document.querySelector("[onclick=\"switchTab('json')\"]").classList.add('active');
+      }
+    }
+
+    // Copy JSON Spec
+    function copyJsonSpec() {
+      if (!loadedSpecData) {
+        alert('Specification is still loading...');
+        return;
+      }
+      navigator.clipboard.writeText(JSON.stringify(loadedSpecData, null, 2))
+        .then(() => {
+          const btn = document.querySelector('.btn-copy');
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy JSON', 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+    }
+  </script>
+</body>
+</html>
