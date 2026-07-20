@@ -33,8 +33,8 @@ export class PaymentsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Initialize a Paystack transaction (supports Bank Transfer)' })
-  async initializePaystack(@Body() body: { orderId: string; amount: number }) {
-    return this.paymentsService.initializePaystackTransaction(body.orderId, body.amount);
+  async initializePaystack(@Body() body: { orderId: string; amount: number; paymentMethod?: string }) {
+    return this.paymentsService.initializePaystackTransaction(body.orderId, body.amount, body.paymentMethod);
   }
 
   @Public()

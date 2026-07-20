@@ -102,7 +102,7 @@ export class PaymentsService {
   // PAYSTACK INTEGRATION
   // ==============================================================================
 
-  async initializePaystackTransaction(orderId: string, amount: number) {
+  async initializePaystackTransaction(orderId: string, amount: number, paymentMethod: string = 'card') {
     const paystackSecretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
     if (!paystackSecretKey) {
       throw new BadRequestException('Paystack secret key is not configured');
@@ -133,7 +133,7 @@ export class PaymentsService {
           amount: amountInKobo,
           reference: orderId,
           currency: 'NGN', // Explicitly setting to NGN for Bank Transfer support
-          channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+          channels: paymentMethod === 'bank_transfer' ? ['bank_transfer'] : ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
           callback_url: `${this.configService.get<string>('FRONTEND_URL')}/checkout/success?orderId=${orderId}`,
         }),
       });
