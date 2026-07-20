@@ -160,6 +160,7 @@ let PaymentsService = class PaymentsService {
                     reference: orderId,
                     currency: 'NGN',
                     channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+                    callback_url: `${this.configService.get('FRONTEND_URL')}/checkout/success?orderId=${orderId}`,
                 }),
             });
             const data = await response.json();
