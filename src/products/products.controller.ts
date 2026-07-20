@@ -21,14 +21,6 @@ import { Role } from '@prisma/client';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-
-  @Public()
-  @Get('seed')
-  @ApiOperation({ summary: 'Seed the database' })
-  async seed() {
-    return this.productsService.seed();
-  }
-
   @Public()
   @Get()
   @ApiOperation({ summary: 'List products with filters and pagination' })
