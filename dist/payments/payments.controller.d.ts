@@ -12,4 +12,15 @@ export declare class PaymentsController {
     handleWebhook(signature: string, req: any): Promise<{
         received: boolean;
     }>;
+    initializePaystack(body: {
+        orderId: string;
+        amount: number;
+    }): Promise<{
+        authorizationUrl: any;
+        accessCode: any;
+        reference: any;
+    }>;
+    handlePaystackWebhook(signature: string, req: any): Promise<{
+        received: boolean;
+    }>;
 }

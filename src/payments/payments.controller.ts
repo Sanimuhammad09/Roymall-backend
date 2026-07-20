@@ -28,4 +28,22 @@ export class PaymentsController {
     // For simplicity, assuming payload is available on req.rawBody or handled via middleware
     return this.paymentsService.handleWebhook(signature, req.rawBody || req.body);
   }
+
+  @Post('paystack/initialize')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Initialize a Paystack transaction (supports Bank Transfer)' })
+  async initializePaystack(@Body() body: { orderId: string; amount: number }) {
+    return this.paymentsService.initializePaystackTransaction(body.orderId, body.amount);
+  }
+
+  @Public()
+  @Post('paystack/webhook')
+  @ApiOperation({ summary: 'Paystack webhook endpoint' })
+  async handlePaystackWebhook(
+    @Headers('x-paystack-signature') signature: string,
+    @Req() req: any,
+  ) {
+    return this.paymentsService.handlePaystackWebhook(signature, req.body);
+  }
 }

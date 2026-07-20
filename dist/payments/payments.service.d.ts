@@ -13,4 +13,13 @@ export declare class PaymentsService {
         received: boolean;
     }>;
     private handlePaymentSuccess;
+    initializePaystackTransaction(orderId: string, amount: number): Promise<{
+        authorizationUrl: any;
+        accessCode: any;
+        reference: any;
+    }>;
+    handlePaystackWebhook(signature: string, payload: any): Promise<{
+        received: boolean;
+    }>;
+    private handlePaystackSuccess;
 }

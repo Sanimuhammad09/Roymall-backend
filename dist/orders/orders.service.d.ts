@@ -24,13 +24,13 @@ export declare class OrdersService {
         items: ({
             variant: {
                 product: {
-                    name: string;
                     id: string;
                     isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
-                    description: string;
+                    name: string;
                     slug: string;
+                    description: string;
                     fabricDetails: string | null;
                     careInstructions: string | null;
                     basePrice: number;
@@ -42,7 +42,6 @@ export declare class OrdersService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
                 sku: string;
                 barcode: string | null;
                 color: string;
@@ -50,6 +49,7 @@ export declare class OrdersService {
                 size: string;
                 priceOffset: number;
                 inventory: number;
+                productId: string;
             };
         } & {
             id: string;
@@ -85,17 +85,16 @@ export declare class OrdersService {
                     images: {
                         order: number;
                         id: string;
-                        productId: string;
                         url: string;
                         alt: string | null;
                         isMain: boolean;
+                        productId: string;
                     }[];
                 };
             } & {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
                 sku: string;
                 barcode: string | null;
                 color: string;
@@ -103,6 +102,7 @@ export declare class OrdersService {
                 size: string;
                 priceOffset: number;
                 inventory: number;
+                productId: string;
             };
         } & {
             id: string;
@@ -149,17 +149,16 @@ export declare class OrdersService {
                     images: {
                         order: number;
                         id: string;
-                        productId: string;
                         url: string;
                         alt: string | null;
                         isMain: boolean;
+                        productId: string;
                     }[];
                 };
             } & {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
                 sku: string;
                 barcode: string | null;
                 color: string;
@@ -167,6 +166,7 @@ export declare class OrdersService {
                 size: string;
                 priceOffset: number;
                 inventory: number;
+                productId: string;
             };
         } & {
             id: string;

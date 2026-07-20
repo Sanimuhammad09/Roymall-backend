@@ -5,29 +5,28 @@ export declare class ProductsService {
     constructor(prisma: PrismaService);
     create(dto: CreateProductDto): Promise<{
         category: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
             parentId: string | null;
         };
         collection: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
         } | null;
         variants: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             barcode: string | null;
             color: string;
@@ -35,23 +34,24 @@ export declare class ProductsService {
             size: string;
             priceOffset: number;
             inventory: number;
+            productId: string;
         }[];
         images: {
             order: number;
             id: string;
-            productId: string;
             url: string;
             alt: string | null;
             isMain: boolean;
+            productId: string;
         }[];
     } & {
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -65,9 +65,6 @@ export declare class ProductsService {
                 name: string;
                 slug: string;
             };
-            _count: {
-                reviews: number;
-            };
             variants: {
                 id: string;
                 color: string;
@@ -79,19 +76,22 @@ export declare class ProductsService {
             images: {
                 order: number;
                 id: string;
-                productId: string;
                 url: string;
                 alt: string | null;
                 isMain: boolean;
+                productId: string;
             }[];
+            _count: {
+                reviews: number;
+            };
         } & {
-            name: string;
             id: string;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
+            name: string;
             slug: string;
+            description: string;
             fabricDetails: string | null;
             careInstructions: string | null;
             basePrice: number;
@@ -108,22 +108,22 @@ export declare class ProductsService {
     }>;
     findBySlug(slug: string): Promise<{
         category: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
             parentId: string | null;
         };
         collection: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
         } | null;
         reviews: ({
@@ -143,14 +143,10 @@ export declare class ProductsService {
             isApproved: boolean;
             productId: string;
         })[];
-        _count: {
-            reviews: number;
-        };
         variants: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             barcode: string | null;
             color: string;
@@ -158,30 +154,34 @@ export declare class ProductsService {
             size: string;
             priceOffset: number;
             inventory: number;
+            productId: string;
         }[];
         images: {
             order: number;
             id: string;
-            productId: string;
             url: string;
             alt: string | null;
             isMain: boolean;
+            productId: string;
         }[];
         videos: {
             order: number;
             id: string;
-            productId: string;
             url: string;
+            productId: string;
             thumbnail: string | null;
         }[];
+        _count: {
+            reviews: number;
+        };
     } & {
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -191,29 +191,28 @@ export declare class ProductsService {
     }>;
     findById(id: string): Promise<{
         category: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
             parentId: string | null;
         };
         collection: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
         } | null;
         variants: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             barcode: string | null;
             color: string;
@@ -221,23 +220,24 @@ export declare class ProductsService {
             size: string;
             priceOffset: number;
             inventory: number;
+            productId: string;
         }[];
         images: {
             order: number;
             id: string;
-            productId: string;
             url: string;
             alt: string | null;
             isMain: boolean;
+            productId: string;
         }[];
     } & {
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -247,29 +247,28 @@ export declare class ProductsService {
     }>;
     update(id: string, dto: UpdateProductDto): Promise<{
         category: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
             parentId: string | null;
         };
         collection: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
+            name: string;
             slug: string;
+            description: string | null;
             image: string | null;
         } | null;
         variants: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             barcode: string | null;
             color: string;
@@ -277,23 +276,24 @@ export declare class ProductsService {
             size: string;
             priceOffset: number;
             inventory: number;
+            productId: string;
         }[];
         images: {
             order: number;
             id: string;
-            productId: string;
             url: string;
             alt: string | null;
             isMain: boolean;
+            productId: string;
         }[];
     } & {
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -307,7 +307,6 @@ export declare class ProductsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
         sku: string;
         barcode: string | null;
         color: string;
@@ -315,15 +314,16 @@ export declare class ProductsService {
         size: string;
         priceOffset: number;
         inventory: number;
+        productId: string;
     }>;
     remove(id: string): Promise<{
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -339,19 +339,19 @@ export declare class ProductsService {
         images: {
             order: number;
             id: string;
-            productId: string;
             url: string;
             alt: string | null;
             isMain: boolean;
+            productId: string;
         }[];
     } & {
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -367,19 +367,19 @@ export declare class ProductsService {
         images: {
             order: number;
             id: string;
-            productId: string;
             url: string;
             alt: string | null;
             isMain: boolean;
+            productId: string;
         }[];
     } & {
-        name: string;
         id: string;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
+        name: string;
         slug: string;
+        description: string;
         fabricDetails: string | null;
         careInstructions: string | null;
         basePrice: number;
@@ -387,4 +387,13 @@ export declare class ProductsService {
         categoryId: string;
         collectionId: string | null;
     })[]>;
+    seed(): Promise<{
+        status: string;
+        message: string;
+        error?: undefined;
+    } | {
+        status: string;
+        error: any;
+        message?: undefined;
+    }>;
 }

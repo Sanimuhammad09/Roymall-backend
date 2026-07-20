@@ -29,6 +29,12 @@ let PaymentsController = class PaymentsController {
     async handleWebhook(signature, req) {
         return this.paymentsService.handleWebhook(signature, req.rawBody || req.body);
     }
+    async initializePaystack(body) {
+        return this.paymentsService.initializePaystackTransaction(body.orderId, body.amount);
+    }
+    async handlePaystackWebhook(signature, req) {
+        return this.paymentsService.handlePaystackWebhook(signature, req.body);
+    }
 };
 exports.PaymentsController = PaymentsController;
 __decorate([
@@ -51,6 +57,26 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PaymentsController.prototype, "handleWebhook", null);
+__decorate([
+    (0, common_1.Post)('paystack/initialize'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Initialize a Paystack transaction (supports Bank Transfer)' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], PaymentsController.prototype, "initializePaystack", null);
+__decorate([
+    (0, public_decorator_1.Public)(),
+    (0, common_1.Post)('paystack/webhook'),
+    (0, swagger_1.ApiOperation)({ summary: 'Paystack webhook endpoint' }),
+    __param(0, (0, common_1.Headers)('x-paystack-signature')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PaymentsController.prototype, "handlePaystackWebhook", null);
 exports.PaymentsController = PaymentsController = __decorate([
     (0, swagger_1.ApiTags)('payments'),
     (0, common_1.Controller)('payments'),

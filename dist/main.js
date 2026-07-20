@@ -15,12 +15,20 @@ async function bootstrap() {
         const app = await core_1.NestFactory.create(app_module_1.AppModule);
         app.use((0, helmet_1.default)());
         app.enableCors({
-            origin: [
-                process.env.FRONTEND_URL,
-                'http://localhost:3000',
-                'http://localhost:5173',
-                'https://roymall-frontend.vercel.app'
-            ].filter(Boolean),
+            origin: (origin, callback) => {
+                const allowedOrigins = [
+                    process.env.FRONTEND_URL,
+                    'https://roymall-frontend.vercel.app',
+                    'https://roymallscents.vercel.app',
+                    'https://roymall-scents.vercel.app',
+                ].filter(Boolean);
+                if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin) || allowedOrigins.includes(origin)) {
+                    callback(null, true);
+                }
+                else {
+                    callback(null, false);
+                }
+            },
             credentials: true,
         });
         app.setGlobalPrefix('api');
