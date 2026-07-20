@@ -134,6 +134,7 @@ export class PaymentsService {
           reference: orderId,
           currency: 'NGN', // Explicitly setting to NGN for Bank Transfer support
           channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+          callback_url: `${this.configService.get<string>('FRONTEND_URL')}/checkout/success?orderId=${orderId}`,
         }),
       });
 
