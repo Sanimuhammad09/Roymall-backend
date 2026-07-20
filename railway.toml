@@ -1,0 +1,6 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm run build && node_modules/.bin/prisma generate"
+
+[deploy]
+startCommand = "npm run start:prod"
