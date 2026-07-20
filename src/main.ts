@@ -18,6 +18,7 @@ async function bootstrap() {
           process.env.FRONTEND_URL,
           'https://roymall-frontend.vercel.app',
           'https://roymallscents.vercel.app',
+          'https://roymall-scents.vercel.app',
         ].filter(Boolean) as string[];
         
         // Allow requests with no origin (mobile apps, curl, etc.)
