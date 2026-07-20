@@ -13,12 +13,21 @@ async function bootstrap() {
     // Security
     app.use(helmet());
     app.enableCors({
-      origin: [
-        process.env.FRONTEND_URL, 
-        'http://localhost:3000', 
-        'http://localhost:5173',
-        'https://roymall-frontend.vercel.app'
-      ].filter(Boolean) as string[],
+      origin: (origin, callback) => {
+        const allowedOrigins = [
+          process.env.FRONTEND_URL,
+          'https://roymall-frontend.vercel.app',
+          'https://roymallscents.vercel.app',
+        ].filter(Boolean) as string[];
+        
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        // Allow any localhost origin (any port) for development
+        if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin) || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(null, false);
+        }
+      },
       credentials: true,
     });
 
