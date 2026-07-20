@@ -13,7 +13,7 @@ export declare class PaymentsService {
         received: boolean;
     }>;
     private handlePaymentSuccess;
-    initializePaystackTransaction(orderId: string, amount: number): Promise<{
+    initializePaystackTransaction(orderId: string, amount: number, paymentMethod?: string): Promise<{
         authorizationUrl: any;
         accessCode: any;
         reference: any;

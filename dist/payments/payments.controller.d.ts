@@ -15,6 +15,7 @@ export declare class PaymentsController {
     initializePaystack(body: {
         orderId: string;
         amount: number;
+        paymentMethod?: string;
     }): Promise<{
         authorizationUrl: any;
         accessCode: any;

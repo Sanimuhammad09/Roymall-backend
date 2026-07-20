@@ -133,7 +133,7 @@ let PaymentsService = class PaymentsService {
             });
         });
     }
-    async initializePaystackTransaction(orderId, amount) {
+    async initializePaystackTransaction(orderId, amount, paymentMethod = 'card') {
         const paystackSecretKey = this.configService.get('PAYSTACK_SECRET_KEY');
         if (!paystackSecretKey) {
             throw new common_1.BadRequestException('Paystack secret key is not configured');
@@ -159,7 +159,7 @@ let PaymentsService = class PaymentsService {
                     amount: amountInKobo,
                     reference: orderId,
                     currency: 'NGN',
-                    channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+                    channels: paymentMethod === 'bank_transfer' ? ['bank_transfer'] : ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
                     callback_url: `${this.configService.get('FRONTEND_URL')}/checkout/success?orderId=${orderId}`,
                 }),
             });

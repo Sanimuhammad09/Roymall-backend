@@ -30,7 +30,7 @@ let PaymentsController = class PaymentsController {
         return this.paymentsService.handleWebhook(signature, req.rawBody || req.body);
     }
     async initializePaystack(body) {
-        return this.paymentsService.initializePaystackTransaction(body.orderId, body.amount);
+        return this.paymentsService.initializePaystackTransaction(body.orderId, body.amount, body.paymentMethod);
     }
     async handlePaystackWebhook(signature, req) {
         return this.paymentsService.handlePaystackWebhook(signature, req.body);
