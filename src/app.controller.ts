@@ -318,6 +318,54 @@ export class AppController {
         },
       });
 
+      const newProducts = [
+        { name: 'Rose & Vanilla Sensuelle', slug: 'rose-vanilla-sensuelle', price: 165000, col: womenCol.id, cat: catMap['eau-de-parfum'], color: 'Rose', hex: '#E8A598' },
+        { name: 'Jasmine Bloom', slug: 'jasmine-bloom', price: 145000, col: womenCol.id, cat: catMap['eau-de-parfum'], color: 'Clear', hex: '#FFFFFF' },
+        { name: 'Peony & Blush', slug: 'peony-and-blush', price: 180000, col: womenCol.id, cat: catMap['eau-de-parfum'], color: 'Pink', hex: '#FFC0CB' },
+        { name: 'Citrus Sun', slug: 'citrus-sun', price: 95000, col: womenCol.id, cat: catMap['eau-de-toilette'], color: 'Yellow', hex: '#FFFF00' },
+        { name: 'Ocean Breeze', slug: 'ocean-breeze', price: 110000, col: womenCol.id, cat: catMap['eau-de-toilette'], color: 'Aqua', hex: '#00FFFF' },
+        { name: 'Midnight Oud', slug: 'midnight-oud', price: 210000, col: menCol.id, cat: catMap['eau-de-parfum'], color: 'Black', hex: '#000000' },
+        { name: 'Leather & Spice', slug: 'leather-and-spice', price: 195000, col: menCol.id, cat: catMap['eau-de-parfum'], color: 'Brown', hex: '#8B4513' },
+        { name: 'Cedarwood Intense', slug: 'cedarwood-intense', price: 175000, col: menCol.id, cat: catMap['eau-de-parfum'], color: 'Wood', hex: '#D2B48C' },
+        { name: 'Cool Water Burst', slug: 'cool-water-burst', price: 105000, col: menCol.id, cat: catMap['eau-de-toilette'], color: 'Blue', hex: '#0000FF' },
+        { name: 'Green Vetiver', slug: 'green-vetiver', price: 120000, col: menCol.id, cat: catMap['eau-de-toilette'], color: 'Green', hex: '#008000' },
+        { name: 'Santal Supreme', slug: 'santal-supreme', price: 230000, col: womenCol.id, cat: catMap['eau-de-parfum'], color: 'Amber', hex: '#FFBF00' },
+        { name: 'Bergamot & Musk', slug: 'bergamot-and-musk', price: 185000, col: menCol.id, cat: catMap['eau-de-parfum'], color: 'Silver', hex: '#C0C0C0' },
+        { name: 'Ultimate Discovery Set', slug: 'ultimate-discovery-set', price: 65000, col: womenCol.id, cat: catMap['gift-sets'], color: 'Multi', hex: '#808080' },
+        { name: 'His & Hers Duo', slug: 'his-and-hers-duo', price: 320000, col: womenCol.id, cat: catMap['gift-sets'], color: 'Gold', hex: '#FFD700' },
+        { name: 'Aura Travel Spray', slug: 'aura-travel-spray', price: 45000, col: womenCol.id, cat: catMap['travel-sizes'], color: 'Rose', hex: '#E8A598' },
+        { name: 'Oud Velvet Mini', slug: 'oud-velvet-mini', price: 55000, col: menCol.id, cat: catMap['travel-sizes'], color: 'Black', hex: '#000000' }
+      ];
+
+      for (const p of newProducts) {
+        await this.prisma.product.upsert({
+          where: { slug: p.slug },
+          update: { basePrice: p.price },
+          create: {
+            name: p.name,
+            slug: p.slug,
+            description: `Experience the captivating essence of ${p.name}. A truly remarkable fragrance crafted for those who appreciate fine perfumery.`,
+            basePrice: p.price,
+            categoryId: p.cat || catMap['womens-fragrances'],
+            collectionId: p.col,
+            isFeatured: true,
+            fabricDetails: 'Top Notes: Citrus, Floral. Heart Notes: Jasmine, Spice. Base Notes: Wood, Vanilla, Amber.',
+            careInstructions: 'Alcohol Denat., Water (Aqua), Fragrance (Parfum). Store in a cool, dry place.',
+            images: {
+              create: [
+                { url: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop&q=60', isMain: true },
+                { url: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1974&auto=format&fit=crop', isMain: false },
+              ]
+            },
+            variants: {
+              create: [
+                { sku: `${p.slug.toUpperCase().substring(0,6)}-50ML`, color: p.color, colorHex: p.hex, size: p.cat === catMap['travel-sizes'] ? '10ml' : '50ml', inventory: 50 },
+              ]
+            }
+          }
+        });
+      }
+
       return { status: 'success', message: 'Seeding completed successfully!' };
     } catch (e: any) {
       console.error(e);
