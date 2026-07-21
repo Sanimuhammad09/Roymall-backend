@@ -44,7 +44,7 @@ async function main() {
   cats.forEach(c => catMap[c.slug] = c);
 
   for (const p of newProducts) {
-    const col = colMap[p.col];
+    const col = colMap[p.col] || menCol;
     const cat = catMap[p.cat] || cats[0]; // fallback to first cat if not found
 
     const product = await prisma.product.upsert({
@@ -73,7 +73,7 @@ async function main() {
         color: p.color,
         colorHex: p.hex,
         size: p.cat === 'travel-sizes' ? '10ml' : '50ml',
-        priceOverride: p.price,
+        priceOffset: 0,
         inventory: 50,
       }
     });
@@ -90,9 +90,8 @@ async function main() {
         data: {
           productId: product.id,
           url: img.url,
-          altText: img.altText,
-          isPrimary: img.isPrimary,
-          order: img.order,
+          alt: img.altText,
+          isMain: img.isPrimary,
         }
       });
     }

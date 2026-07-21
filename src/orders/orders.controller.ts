@@ -8,27 +8,30 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Role } from '@prisma/client';
 
+import { OptionalJwtAuthGuard } from '../common/guards/optional-jwt-auth.guard';
+
 @ApiTags('orders')
 @Controller('orders')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
+  @UseGuards(OptionalJwtAuthGuard)
   @ApiOperation({ summary: 'Create a new order from checkout' })
   async create(@CurrentUser() user: any, @Body() dto: CreateOrderDto) {
-    return this.ordersService.create(user.id, dto);
+    return this.ordersService.create(user?.id, dto);
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all orders for the current user' })
   async findMine(@CurrentUser() user: any) {
     return this.ordersService.findByUser(user.id);
   }
 
   @Get('admin/all')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get all orders (admin only)' })
   async findAllAdmin() {
@@ -36,13 +39,14 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get a specific order by ID' })
   async findOne(@CurrentUser() user: any, @Param('id') id: string) {
     return this.ordersService.findOne(id, user.id);
   }
 
   @Post('admin/:id/status')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update order status (admin only)' })
   async updateStatus(

@@ -13,7 +13,7 @@ export class OrdersService {
     private readonly invoiceService: InvoiceService,
   ) {}
 
-  async create(userId: string, dto: CreateOrderDto) {
+  async create(userId: string | undefined, dto: CreateOrderDto) {
     // Generate a unique order number (e.g., ORD-ABC1234)
     const orderNumber = `ORD-${randomBytes(4).toString('hex').toUpperCase()}`;
 
