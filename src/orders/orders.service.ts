@@ -100,12 +100,17 @@ export class OrdersService {
     });
 
     // Send confirmation email asynchronously (don't block the response)
-    this.mailService.sendOrderConfirmationEmail(
-      order.user.email,
-      order.user.firstName,
-      order.orderNumber,
-      order.totalAmount,
-    ).catch(err => console.error('Failed to send order confirmation email', err));
+    const email = order.user?.email || (dto.shippingAddress as any)?.email;
+    const firstName = order.user?.firstName || (dto.shippingAddress as any)?.firstName || 'Guest';
+
+    if (email) {
+      this.mailService.sendOrderConfirmationEmail(
+        email,
+        firstName,
+        order.orderNumber,
+        order.totalAmount,
+      ).catch(err => console.error('Failed to send order confirmation email', err));
+    }
 
     return order;
   }

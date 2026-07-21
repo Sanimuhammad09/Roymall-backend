@@ -145,7 +145,10 @@ let PaymentsService = class PaymentsService {
         if (!order) {
             throw new common_1.BadRequestException('Order not found');
         }
-        const email = order.user.email;
+        const email = order.user?.email || order.shippingAddress?.email;
+        if (!email) {
+            throw new common_1.BadRequestException('An email address is required for checkout');
+        }
         const amountInKobo = Math.round(amount * 100);
         try {
             const response = await fetch('https://api.paystack.co/transaction/initialize', {

@@ -117,7 +117,12 @@ export class PaymentsService {
       throw new BadRequestException('Order not found');
     }
 
-    const email = order.user.email;
+    const email = order.user?.email || (order.shippingAddress as any)?.email;
+    
+    if (!email) {
+      throw new BadRequestException('An email address is required for checkout');
+    }
+
     // Paystack expects amount in kobo/cents.
     const amountInKobo = Math.round(amount * 100);
 

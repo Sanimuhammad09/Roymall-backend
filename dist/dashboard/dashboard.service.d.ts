@@ -17,7 +17,7 @@ export declare class DashboardService {
     getRecentOrders(): Promise<{
         id: string;
         customer: string;
-        email: string;
+        email: any;
         amount: number;
         status: import(".prisma/client").$Enums.OrderStatus;
         date: Date;

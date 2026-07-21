@@ -101,8 +101,8 @@ export class DashboardService {
 
     return orders.map(order => ({
       id: order.orderNumber,
-      customer: `${order.user.firstName} ${order.user.lastName}`,
-      email: order.user.email,
+      customer: order.user ? `${order.user.firstName} ${order.user.lastName}` : `${(order.shippingAddress as any)?.firstName || 'Guest'} ${(order.shippingAddress as any)?.lastName || ''}`.trim(),
+      email: order.user?.email || (order.shippingAddress as any)?.email || 'Guest',
       amount: order.totalAmount,
       status: order.status,
       date: order.createdAt,
