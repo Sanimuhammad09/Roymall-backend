@@ -101,4 +101,12 @@ export class CartService {
       where: { id: itemId },
     });
   }
+
+  async clearCart(userId?: string, sessionId?: string) {
+    const cart = await this.getCart(userId, sessionId);
+    if (!cart) return { count: 0 };
+    return this.prisma.cartItem.deleteMany({
+      where: { cartId: cart.id },
+    });
+  }
 }

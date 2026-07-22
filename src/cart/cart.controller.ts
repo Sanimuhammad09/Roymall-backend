@@ -39,4 +39,13 @@ export class CartController {
   async removeItem(@Param('itemId') itemId: string) {
     return this.cartService.removeItem(itemId);
   }
+
+  @Public()
+  @Delete('clear/all')
+  @ApiOperation({ summary: 'Clear entire cart' })
+  @ApiQuery({ name: 'sessionId', required: false, type: String })
+  async clearCart(@Req() req: any, @Query('sessionId') sessionId?: string) {
+    const userId = req.user?.id;
+    return this.cartService.clearCart(userId, sessionId);
+  }
 }
