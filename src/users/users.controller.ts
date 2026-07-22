@@ -77,6 +77,15 @@ export class UsersController {
     });
   }
 
+  @Get('admin/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get a specific user with orders (admin only)' })
+  async findOneAdmin(@Param('id') id: string) {
+    return this.usersService.findOneAdmin(id);
+  }
+
   @Put('admin/:id/status')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)

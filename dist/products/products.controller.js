@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const swagger_1 = require("@nestjs/swagger");
 const products_service_1 = require("./products.service");
 const product_dto_1 = require("./dto/product.dto");
@@ -40,6 +41,12 @@ let ProductsController = class ProductsController {
     }
     async remove(id) {
         return this.productsService.remove(id);
+    }
+    async uploadImages(id, files, isPrimary) {
+        return this.productsService.uploadImages(id, files, isPrimary === 'true');
+    }
+    async deleteImage(id, imageId) {
+        return this.productsService.deleteImage(id, imageId);
     }
 };
 exports.ProductsController = ProductsController;
@@ -95,6 +102,32 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)(':id/images'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('images')),
+    (0, swagger_1.ApiOperation)({ summary: 'Upload images for a product (admin only)' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __param(2, (0, common_1.Body)('isPrimary')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Array, String]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "uploadImages", null);
+__decorate([
+    (0, common_1.Delete)(':id/images/:imageId'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete an image from a product (admin only)' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('imageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "deleteImage", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, swagger_1.ApiTags)('products'),
     (0, common_1.Controller)('products'),

@@ -36,8 +36,16 @@ let OrdersController = class OrdersController {
     async findOne(id, req) {
         return this.ordersService.findOne(id, req.user.id);
     }
-    async findAllAdmin() {
-        return this.ordersService.findAllAdmin();
+    async findAllAdmin(page, limit, status, search) {
+        return this.ordersService.findAllAdmin({
+            page: page ? parseInt(page, 10) : 1,
+            limit: limit ? parseInt(limit, 10) : 10,
+            status,
+            search,
+        });
+    }
+    async findOneAdmin(id) {
+        return this.ordersService.findOneAdmin(id);
     }
     async updateStatus(id, dto) {
         return this.ordersService.updateStatus(id, dto.status);
@@ -79,10 +87,25 @@ __decorate([
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get all orders (admin only)' }),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
+    __param(2, (0, common_1.Query)('status')),
+    __param(3, (0, common_1.Query)('search')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "findAllAdmin", null);
+__decorate([
+    (0, common_1.Get)('admin/:id'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get a specific order (admin only)' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "findOneAdmin", null);
 __decorate([
     (0, common_1.Put)('admin/:id/status'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),

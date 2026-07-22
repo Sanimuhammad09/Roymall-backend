@@ -8,7 +8,10 @@ import {
   Param,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto, ProductFilterDto } from './dto/product.dto';
@@ -61,5 +64,31 @@ export class ProductsController {
   @ApiOperation({ summary: 'Delete a product (admin only)' })
   async remove(@Param('id') id: string) {
     return this.productsService.remove(id);
+  }
+
+  @Post(':id/images')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @UseInterceptors(FilesInterceptor('images'))
+  @ApiOperation({ summary: 'Upload images for a product (admin only)' })
+  async uploadImages(
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body('isPrimary') isPrimary?: string,
+  ) {
+    return this.productsService.uploadImages(id, files, isPrimary === 'true');
+  }
+
+  @Delete(':id/images/:imageId')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete an image from a product (admin only)' })
+  async deleteImage(
+    @Param('id') id: string,
+    @Param('imageId') imageId: string,
+  ) {
+    return this.productsService.deleteImage(id, imageId);
   }
 }

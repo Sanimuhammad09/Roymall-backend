@@ -14,6 +14,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { CartModule } from './cart/cart.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
+import { AdminModule } from './admin/admin.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 
 @Module({
@@ -33,6 +35,8 @@ import { InquiriesModule } from './inquiries/inquiries.module';
     CartModule,
     AppointmentsModule,
     InquiriesModule,
+    AdminModule,
+    CloudinaryModule,
   ],
   providers: [
     // Apply JWT guard globally — use @Public() to exempt routes

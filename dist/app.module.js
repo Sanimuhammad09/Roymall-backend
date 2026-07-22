@@ -26,6 +26,8 @@ const payments_module_1 = require("./payments/payments.module");
 const cart_module_1 = require("./cart/cart.module");
 const appointments_module_1 = require("./appointments/appointments.module");
 const inquiries_module_1 = require("./inquiries/inquiries.module");
+const admin_module_1 = require("./admin/admin.module");
+const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -47,6 +49,8 @@ exports.AppModule = AppModule = __decorate([
             cart_module_1.CartModule,
             appointments_module_1.AppointmentsModule,
             inquiries_module_1.InquiriesModule,
+            admin_module_1.AdminModule,
+            cloudinary_module_1.CloudinaryModule,
         ],
         providers: [
             {

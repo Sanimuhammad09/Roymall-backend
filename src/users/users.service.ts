@@ -99,8 +99,9 @@ export class UsersService {
           email: true,
           firstName: true,
           lastName: true,
+          phoneNumber: true,
           role: true,
-
+          isActive: true,
           createdAt: true,
           updatedAt: true,
         },
@@ -117,5 +118,36 @@ export class UsersService {
         totalPages: Math.ceil(total / limit),
       },
     };
+  }
+
+  async findOneAdmin(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        phoneNumber: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+        addresses: true,
+        orders: {
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            orderNumber: true,
+            totalAmount: true,
+            status: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 }

@@ -12,10 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const cloudinary_service_1 = require("../cloudinary/cloudinary.service");
 let ProductsService = class ProductsService {
     prisma;
-    constructor(prisma) {
+    cloudinaryService;
+    constructor(prisma, cloudinaryService) {
         this.prisma = prisma;
+        this.cloudinaryService = cloudinaryService;
     }
     async create(dto) {
         const { images, ...productData } = dto;
@@ -100,10 +103,42 @@ let ProductsService = class ProductsService {
         await this.findById(id);
         return this.prisma.product.delete({ where: { id } });
     }
+    async uploadImages(productId, files, isPrimary) {
+        const product = await this.findById(productId);
+        const uploadPromises = files.map(file => this.cloudinaryService.uploadImage(file));
+        const results = await Promise.all(uploadPromises);
+        const imagesData = results.map(result => ({
+            productId,
+            url: result.secure_url,
+            publicId: result.public_id,
+            isPrimary: isPrimary,
+        }));
+        if (isPrimary) {
+            await this.prisma.productImage.updateMany({
+                where: { productId },
+                data: { isPrimary: false }
+            });
+        }
+        await this.prisma.productImage.createMany({
+            data: imagesData,
+        });
+        return this.findById(productId);
+    }
+    async deleteImage(productId, imageId) {
+        const image = await this.prisma.productImage.findUnique({ where: { id: imageId } });
+        if (!image)
+            throw new common_1.NotFoundException('Image not found');
+        if (image.publicId) {
+            await this.cloudinaryService.deleteImage(image.publicId);
+        }
+        await this.prisma.productImage.delete({ where: { id: imageId } });
+        return this.findById(productId);
+    }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        cloudinary_service_1.CloudinaryService])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map

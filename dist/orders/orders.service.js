@@ -104,11 +104,60 @@ let OrdersService = class OrdersService {
             throw new common_1.NotFoundException('Order not found');
         return order;
     }
-    async findAllAdmin() {
-        return this.prisma.order.findMany({
-            orderBy: { createdAt: 'desc' },
-            include: { user: { select: { firstName: true, lastName: true, email: true } } },
+    async findAllAdmin(params) {
+        const { page, limit, status, search } = params;
+        const skip = (page - 1) * limit;
+        const where = {
+            ...(status && { status }),
+            ...(search && {
+                OR: [
+                    { orderNumber: { contains: search, mode: 'insensitive' } },
+                    { user: { email: { contains: search, mode: 'insensitive' } } },
+                    { user: { firstName: { contains: search, mode: 'insensitive' } } },
+                    { user: { lastName: { contains: search, mode: 'insensitive' } } },
+                ],
+            }),
+        };
+        const [orders, total] = await Promise.all([
+            this.prisma.order.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { createdAt: 'desc' },
+                include: {
+                    user: { select: { firstName: true, lastName: true, email: true } },
+                    items: { include: { product: { select: { name: true, sku: true } } } },
+                },
+            }),
+            this.prisma.order.count({ where }),
+        ]);
+        return {
+            data: orders,
+            meta: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
+    }
+    async findOneAdmin(id) {
+        const order = await this.prisma.order.findUnique({
+            where: { id },
+            include: {
+                user: { select: { id: true, firstName: true, lastName: true, email: true, phoneNumber: true } },
+                items: {
+                    include: {
+                        product: {
+                            select: { id: true, name: true, sku: true, price: true, images: { take: 1, orderBy: { order: 'asc' } } },
+                        },
+                    },
+                },
+            },
         });
+        if (!order)
+            throw new common_1.NotFoundException('Order not found');
+        return order;
     }
     async updateStatus(id, status) {
         const order = await this.prisma.order.findUnique({ where: { id } });

@@ -2,10 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto, UpdateProductDto, ProductFilterDto } from './dto/product.dto';
 import { Prisma } from '@prisma/client';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService
+  ) {}
 
   async create(dto: CreateProductDto) {
     const { images, ...productData } = dto;
@@ -106,5 +110,46 @@ export class ProductsService {
   async remove(id: string) {
     await this.findById(id);
     return this.prisma.product.delete({ where: { id } });
+  }
+
+  async uploadImages(productId: string, files: Express.Multer.File[], isPrimary: boolean) {
+    const product = await this.findById(productId);
+    
+    const uploadPromises = files.map(file => this.cloudinaryService.uploadImage(file));
+    const results = await Promise.all(uploadPromises);
+
+    const imagesData = results.map(result => ({
+      productId,
+      url: result.secure_url,
+      publicId: result.public_id,
+      isPrimary: isPrimary,
+    }));
+
+    // If setting as primary, we might want to unset existing primary images
+    if (isPrimary) {
+      await this.prisma.productImage.updateMany({
+        where: { productId },
+        data: { isPrimary: false }
+      });
+    }
+
+    await this.prisma.productImage.createMany({
+      data: imagesData,
+    });
+
+    return this.findById(productId);
+  }
+
+  async deleteImage(productId: string, imageId: string) {
+    const image = await this.prisma.productImage.findUnique({ where: { id: imageId } });
+    if (!image) throw new NotFoundException('Image not found');
+    
+    if (image.publicId) {
+      await this.cloudinaryService.deleteImage(image.publicId);
+    }
+    
+    await this.prisma.productImage.delete({ where: { id: imageId } });
+    
+    return this.findById(productId);
   }
 }

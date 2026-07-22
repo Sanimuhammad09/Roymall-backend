@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/order.dto';
 import { MailService } from '../mail/mail.service';
 import { randomBytes } from 'crypto';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus, Prisma } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
@@ -108,11 +108,64 @@ export class OrdersService {
     return order;
   }
 
-  async findAllAdmin() {
-    return this.prisma.order.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { user: { select: { firstName: true, lastName: true, email: true } } },
+  async findAllAdmin(params: { page: number; limit: number; status?: OrderStatus; search?: string }) {
+    const { page, limit, status, search } = params;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.OrderWhereInput = {
+      ...(status && { status }),
+      ...(search && {
+        OR: [
+          { orderNumber: { contains: search, mode: 'insensitive' as const } },
+          { user: { email: { contains: search, mode: 'insensitive' as const } } },
+          { user: { firstName: { contains: search, mode: 'insensitive' as const } } },
+          { user: { lastName: { contains: search, mode: 'insensitive' as const } } },
+        ],
+      }),
+    };
+
+    const [orders, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: { select: { firstName: true, lastName: true, email: true } },
+          items: { include: { product: { select: { name: true, sku: true } } } },
+        },
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    return {
+      data: orders,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async findOneAdmin(id: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+      include: {
+        user: { select: { id: true, firstName: true, lastName: true, email: true, phoneNumber: true } },
+        items: {
+          include: {
+            product: {
+              select: { id: true, name: true, sku: true, price: true, images: { take: 1, orderBy: { order: 'asc' } } },
+            },
+          },
+        },
+      },
     });
+
+    if (!order) throw new NotFoundException('Order not found');
+    return order;
   }
 
   async updateStatus(id: string, status: OrderStatus) {
@@ -125,3 +178,4 @@ export class OrdersService {
     });
   }
 }
+

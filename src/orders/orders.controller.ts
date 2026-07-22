@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Param,
+  Query,
   UseGuards,
   Req,
   Put,
@@ -14,7 +15,7 @@ import { CreateOrderDto, UpdateOrderStatusDto } from './dto/order.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { Role } from '@prisma/client';
+import { Role, OrderStatus } from '@prisma/client';
 import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('orders')
@@ -49,8 +50,27 @@ export class OrdersController {
   @Roles(Role.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all orders (admin only)' })
-  async findAllAdmin() {
-    return this.ordersService.findAllAdmin();
+  async findAllAdmin(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('status') status?: OrderStatus,
+    @Query('search') search?: string,
+  ) {
+    return this.ordersService.findAllAdmin({
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 10,
+      status,
+      search,
+    });
+  }
+
+  @Get('admin/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get a specific order (admin only)' })
+  async findOneAdmin(@Param('id') id: string) {
+    return this.ordersService.findOneAdmin(id);
   }
 
   @Put('admin/:id/status')

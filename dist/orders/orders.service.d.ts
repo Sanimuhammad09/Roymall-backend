@@ -1,7 +1,7 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/order.dto';
 import { MailService } from '../mail/mail.service';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus, Prisma } from '@prisma/client';
 export declare class OrdersService {
     private readonly prisma;
     private readonly mailService;
@@ -59,8 +59,8 @@ export declare class OrdersService {
         status: import(".prisma/client").$Enums.OrderStatus;
         shippingAddressId: string | null;
         billingAddressId: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        shippingAddress: Prisma.JsonValue | null;
+        billingAddress: Prisma.JsonValue | null;
     }>;
     findByUser(userId: string): Promise<({
         items: ({
@@ -73,6 +73,7 @@ export declare class OrdersService {
                     url: string;
                     isPrimary: boolean;
                     productId: string;
+                    publicId: string | null;
                 }[];
             };
         } & {
@@ -95,8 +96,8 @@ export declare class OrdersService {
         status: import(".prisma/client").$Enums.OrderStatus;
         shippingAddressId: string | null;
         billingAddressId: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        shippingAddress: Prisma.JsonValue | null;
+        billingAddress: Prisma.JsonValue | null;
     })[]>;
     findOne(id: string, userId: string): Promise<{
         items: ({
@@ -109,6 +110,7 @@ export declare class OrdersService {
                     url: string;
                     isPrimary: boolean;
                     productId: string;
+                    publicId: string | null;
                 }[];
             };
         } & {
@@ -131,15 +133,86 @@ export declare class OrdersService {
         status: import(".prisma/client").$Enums.OrderStatus;
         shippingAddressId: string | null;
         billingAddressId: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        shippingAddress: Prisma.JsonValue | null;
+        billingAddress: Prisma.JsonValue | null;
     }>;
-    findAllAdmin(): Promise<({
+    findAllAdmin(params: {
+        page: number;
+        limit: number;
+        status?: OrderStatus;
+        search?: string;
+    }): Promise<{
+        data: ({
+            user: {
+                email: string;
+                firstName: string;
+                lastName: string;
+            } | null;
+            items: ({
+                product: {
+                    name: string;
+                    sku: string;
+                };
+            } & {
+                id: string;
+                productId: string;
+                quantity: number;
+                priceAtPurchase: number;
+                orderId: string;
+            })[];
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string | null;
+            orderNumber: string;
+            totalAmount: number;
+            subtotal: number;
+            tax: number;
+            shippingCost: number;
+            status: import(".prisma/client").$Enums.OrderStatus;
+            shippingAddressId: string | null;
+            billingAddressId: string | null;
+            shippingAddress: Prisma.JsonValue | null;
+            billingAddress: Prisma.JsonValue | null;
+        })[];
+        meta: {
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+        };
+    }>;
+    findOneAdmin(id: string): Promise<{
         user: {
+            id: string;
             email: string;
             firstName: string;
             lastName: string;
+            phoneNumber: string | null;
         } | null;
+        items: ({
+            product: {
+                name: string;
+                id: string;
+                price: number;
+                sku: string;
+                images: {
+                    order: number;
+                    id: string;
+                    url: string;
+                    isPrimary: boolean;
+                    productId: string;
+                    publicId: string | null;
+                }[];
+            };
+        } & {
+            id: string;
+            productId: string;
+            quantity: number;
+            priceAtPurchase: number;
+            orderId: string;
+        })[];
     } & {
         id: string;
         createdAt: Date;
@@ -153,9 +226,9 @@ export declare class OrdersService {
         status: import(".prisma/client").$Enums.OrderStatus;
         shippingAddressId: string | null;
         billingAddressId: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
-    })[]>;
+        shippingAddress: Prisma.JsonValue | null;
+        billingAddress: Prisma.JsonValue | null;
+    }>;
     updateStatus(id: string, status: OrderStatus): Promise<{
         id: string;
         createdAt: Date;
@@ -169,7 +242,7 @@ export declare class OrdersService {
         status: import(".prisma/client").$Enums.OrderStatus;
         shippingAddressId: string | null;
         billingAddressId: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        shippingAddress: Prisma.JsonValue | null;
+        billingAddress: Prisma.JsonValue | null;
     }>;
 }

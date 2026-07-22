@@ -7,4 +7,5 @@ export declare class MailService {
     sendWelcomeEmail(to: string, firstName: string): Promise<void>;
     sendPasswordResetEmail(to: string, firstName: string, resetToken: string): Promise<void>;
     sendOrderConfirmationEmail(to: string, firstName: string, orderNumber: string, totalAmount: number): Promise<void>;
+    sendAppointmentConfirmationEmail(to: string, fullName: string, serviceType: string, date: Date, time: string): Promise<void>;
 }

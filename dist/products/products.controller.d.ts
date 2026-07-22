@@ -15,6 +15,7 @@ export declare class ProductsController {
                 url: string;
                 isPrimary: boolean;
                 productId: string;
+                publicId: string | null;
             }[];
         } & {
             name: string;
@@ -57,6 +58,7 @@ export declare class ProductsController {
             url: string;
             isPrimary: boolean;
             productId: string;
+            publicId: string | null;
         }[];
     } & {
         name: string;
@@ -92,6 +94,7 @@ export declare class ProductsController {
             url: string;
             isPrimary: boolean;
             productId: string;
+            publicId: string | null;
         }[];
     } & {
         name: string;
@@ -127,6 +130,7 @@ export declare class ProductsController {
             url: string;
             isPrimary: boolean;
             productId: string;
+            publicId: string | null;
         }[];
     } & {
         name: string;
@@ -148,6 +152,78 @@ export declare class ProductsController {
         categoryId: string;
     }>;
     remove(id: string): Promise<{
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        description: string;
+        tagline: string | null;
+        price: number;
+        sku: string;
+        stockQuantity: number;
+        size: string | null;
+        olfactoryFamily: string | null;
+        isBestSeller: boolean;
+        isNewArrival: boolean;
+        topNotes: string[];
+        heartNotes: string[];
+        baseNotes: string[];
+        categoryId: string;
+    }>;
+    uploadImages(id: string, files: Express.Multer.File[], isPrimary?: string): Promise<{
+        category: {
+            name: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            description: string | null;
+            slug: string;
+        };
+        images: {
+            order: number;
+            id: string;
+            url: string;
+            isPrimary: boolean;
+            productId: string;
+            publicId: string | null;
+        }[];
+    } & {
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        description: string;
+        tagline: string | null;
+        price: number;
+        sku: string;
+        stockQuantity: number;
+        size: string | null;
+        olfactoryFamily: string | null;
+        isBestSeller: boolean;
+        isNewArrival: boolean;
+        topNotes: string[];
+        heartNotes: string[];
+        baseNotes: string[];
+        categoryId: string;
+    }>;
+    deleteImage(id: string, imageId: string): Promise<{
+        category: {
+            name: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            description: string | null;
+            slug: string;
+        };
+        images: {
+            order: number;
+            id: string;
+            url: string;
+            isPrimary: boolean;
+            productId: string;
+            publicId: string | null;
+        }[];
+    } & {
         name: string;
         id: string;
         createdAt: Date;

@@ -1,6 +1,7 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { AppointmentStatus } from '@prisma/client';
 
 export class CreateAppointmentDto {
   @ApiProperty({ example: 'John Doe' })
@@ -44,3 +45,11 @@ export class CreateAppointmentDto {
   @IsString()
   specialNotes?: string;
 }
+
+export class UpdateAppointmentStatusDto {
+  @ApiProperty({ enum: AppointmentStatus, example: AppointmentStatus.CONFIRMED })
+  @IsEnum(AppointmentStatus)
+  @IsNotEmpty()
+  status: AppointmentStatus;
+}
+

@@ -70,6 +70,9 @@ let UsersController = class UsersController {
             search: query.search,
         });
     }
+    async findOneAdmin(id) {
+        return this.usersService.findOneAdmin(id);
+    }
     async updateStatus(id, isActive) {
         const updated = await this.usersService.updateStatus(id, isActive);
         const { passwordHash, ...safeUser } = updated;
@@ -107,6 +110,17 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('admin/:id'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get a specific user with orders (admin only)' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findOneAdmin", null);
 __decorate([
     (0, common_1.Put)('admin/:id/status'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),

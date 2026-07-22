@@ -1,5 +1,6 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { InquiryStatus } from '@prisma/client';
 
 export class CreateInquiryDto {
   @ApiProperty({ example: 'Jane Smith' })
@@ -28,3 +29,11 @@ export class CreateInquiryDto {
   @IsNotEmpty()
   message: string;
 }
+
+export class UpdateInquiryStatusDto {
+  @ApiProperty({ enum: InquiryStatus, example: InquiryStatus.RESPONDED })
+  @IsEnum(InquiryStatus)
+  @IsNotEmpty()
+  status: InquiryStatus;
+}
+

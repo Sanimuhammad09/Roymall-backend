@@ -26,7 +26,9 @@ export declare class UsersService {
             email: string;
             firstName: string;
             lastName: string;
+            phoneNumber: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -36,5 +38,36 @@ export declare class UsersService {
             limit: number;
             totalPages: number;
         };
+    }>;
+    findOneAdmin(id: string): Promise<{
+        id: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+        phoneNumber: string | null;
+        role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        addresses: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            title: string | null;
+            street: string;
+            city: string;
+            state: string;
+            country: string;
+            zipCode: string;
+            isDefault: boolean;
+            userId: string;
+        }[];
+        orders: {
+            id: string;
+            createdAt: Date;
+            orderNumber: string;
+            totalAmount: number;
+            status: import(".prisma/client").$Enums.OrderStatus;
+        }[];
     }>;
 }
