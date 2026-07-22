@@ -1,130 +1,136 @@
 import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/order.dto';
+import { CreateOrderDto, UpdateOrderStatusDto } from './dto/order.dto';
 export declare class OrdersController {
     private readonly ordersService;
     constructor(ordersService: OrdersService);
-    create(user: any, dto: CreateOrderDto): Promise<{
+    create(req: any, dto: CreateOrderDto): Promise<{
         user: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             email: string;
             passwordHash: string;
             firstName: string;
             lastName: string;
+            phoneNumber: string | null;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
-            isEmailVerified: boolean;
-            avatar: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         } | null;
         items: ({
-            variant: {
-                product: {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    name: string;
-                    isActive: boolean;
-                    slug: string;
-                    description: string;
-                    fabricDetails: string | null;
-                    careInstructions: string | null;
-                    basePrice: number;
-                    isFeatured: boolean;
-                    categoryId: string;
-                    collectionId: string | null;
-                };
-            } & {
+            product: {
+                name: string;
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
+                description: string;
+                tagline: string | null;
+                price: number;
                 sku: string;
-                barcode: string | null;
-                color: string;
-                colorHex: string | null;
-                size: string;
-                priceOffset: number;
-                inventory: number;
+                stockQuantity: number;
+                size: string | null;
+                olfactoryFamily: string | null;
+                isBestSeller: boolean;
+                isNewArrival: boolean;
+                topNotes: string[];
+                heartNotes: string[];
+                baseNotes: string[];
+                categoryId: string;
             };
         } & {
             id: string;
+            productId: string;
             quantity: number;
-            unitPrice: number;
-            hasEmbroidery: boolean;
-            variantId: string;
-            embroideryDesignId: string | null;
+            priceAtPurchase: number;
             orderId: string;
         })[];
     } & {
         id: string;
-        orderNumber: string;
-        status: import(".prisma/client").$Enums.OrderStatus;
-        totalAmount: number;
-        subtotal: number;
-        taxAmount: number;
-        shippingCost: number;
-        discountAmount: number;
-        couponCode: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
         userId: string | null;
+        orderNumber: string;
+        totalAmount: number;
+        subtotal: number;
+        tax: number;
+        shippingCost: number;
+        status: import(".prisma/client").$Enums.OrderStatus;
+        shippingAddressId: string | null;
+        billingAddressId: string | null;
+        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
-    findMine(user: any): Promise<({
+    findMyOrders(req: any): Promise<({
         items: ({
-            variant: {
-                product: {
-                    name: string;
-                    slug: string;
-                    images: {
-                        order: number;
-                        id: string;
-                        productId: string;
-                        url: string;
-                        alt: string | null;
-                        isMain: boolean;
-                    }[];
-                };
-            } & {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                productId: string;
+            product: {
+                name: string;
                 sku: string;
-                barcode: string | null;
-                color: string;
-                colorHex: string | null;
-                size: string;
-                priceOffset: number;
-                inventory: number;
+                images: {
+                    order: number;
+                    id: string;
+                    url: string;
+                    isPrimary: boolean;
+                    productId: string;
+                }[];
             };
         } & {
             id: string;
+            productId: string;
             quantity: number;
-            unitPrice: number;
-            hasEmbroidery: boolean;
-            variantId: string;
-            embroideryDesignId: string | null;
+            priceAtPurchase: number;
             orderId: string;
         })[];
     } & {
         id: string;
-        orderNumber: string;
-        status: import(".prisma/client").$Enums.OrderStatus;
-        totalAmount: number;
-        subtotal: number;
-        taxAmount: number;
-        shippingCost: number;
-        discountAmount: number;
-        couponCode: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
         userId: string | null;
+        orderNumber: string;
+        totalAmount: number;
+        subtotal: number;
+        tax: number;
+        shippingCost: number;
+        status: import(".prisma/client").$Enums.OrderStatus;
+        shippingAddressId: string | null;
+        billingAddressId: string | null;
+        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
     })[]>;
+    findOne(id: string, req: any): Promise<{
+        items: ({
+            product: {
+                name: string;
+                sku: string;
+                images: {
+                    order: number;
+                    id: string;
+                    url: string;
+                    isPrimary: boolean;
+                    productId: string;
+                }[];
+            };
+        } & {
+            id: string;
+            productId: string;
+            quantity: number;
+            priceAtPurchase: number;
+            orderId: string;
+        })[];
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string | null;
+        orderNumber: string;
+        totalAmount: number;
+        subtotal: number;
+        tax: number;
+        shippingCost: number;
+        status: import(".prisma/client").$Enums.OrderStatus;
+        shippingAddressId: string | null;
+        billingAddressId: string | null;
+        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+    }>;
     findAllAdmin(): Promise<({
         user: {
             email: string;
@@ -133,105 +139,34 @@ export declare class OrdersController {
         } | null;
     } & {
         id: string;
-        orderNumber: string;
-        status: import(".prisma/client").$Enums.OrderStatus;
-        totalAmount: number;
-        subtotal: number;
-        taxAmount: number;
-        shippingCost: number;
-        discountAmount: number;
-        couponCode: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
         userId: string | null;
+        orderNumber: string;
+        totalAmount: number;
+        subtotal: number;
+        tax: number;
+        shippingCost: number;
+        status: import(".prisma/client").$Enums.OrderStatus;
+        shippingAddressId: string | null;
+        billingAddressId: string | null;
+        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
     })[]>;
-    findOne(user: any, id: string): Promise<{
-        payment: {
-            id: string;
-            status: string;
-            createdAt: Date;
-            updatedAt: Date;
-            orderId: string;
-            provider: string;
-            transactionId: string;
-            amount: number;
-            currency: string;
-        } | null;
-        items: ({
-            variant: {
-                product: {
-                    name: string;
-                    slug: string;
-                    images: {
-                        order: number;
-                        id: string;
-                        productId: string;
-                        url: string;
-                        alt: string | null;
-                        isMain: boolean;
-                    }[];
-                };
-            } & {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                productId: string;
-                sku: string;
-                barcode: string | null;
-                color: string;
-                colorHex: string | null;
-                size: string;
-                priceOffset: number;
-                inventory: number;
-            };
-        } & {
-            id: string;
-            quantity: number;
-            unitPrice: number;
-            hasEmbroidery: boolean;
-            variantId: string;
-            embroideryDesignId: string | null;
-            orderId: string;
-        })[];
-        statusHistory: {
-            id: string;
-            status: import(".prisma/client").$Enums.OrderStatus;
-            createdAt: Date;
-            orderId: string;
-            note: string | null;
-        }[];
-    } & {
+    updateStatus(id: string, dto: UpdateOrderStatusDto): Promise<{
         id: string;
-        orderNumber: string;
-        status: import(".prisma/client").$Enums.OrderStatus;
-        totalAmount: number;
-        subtotal: number;
-        taxAmount: number;
-        shippingCost: number;
-        discountAmount: number;
-        couponCode: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
         userId: string | null;
-    }>;
-    updateStatus(id: string, dto: import('./dto/order.dto').UpdateOrderStatusDto): Promise<{
-        id: string;
         orderNumber: string;
-        status: import(".prisma/client").$Enums.OrderStatus;
         totalAmount: number;
         subtotal: number;
-        taxAmount: number;
+        tax: number;
         shippingCost: number;
-        discountAmount: number;
-        couponCode: string | null;
-        shippingAddress: import("@prisma/client/runtime/library").JsonValue;
-        billingAddress: import("@prisma/client/runtime/library").JsonValue;
-        createdAt: Date;
-        updatedAt: Date;
-        userId: string | null;
+        status: import(".prisma/client").$Enums.OrderStatus;
+        shippingAddressId: string | null;
+        billingAddressId: string | null;
+        shippingAddress: import("@prisma/client/runtime/library").JsonValue | null;
+        billingAddress: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
 }

@@ -13,70 +13,16 @@ exports.ProductFilterDto = exports.UpdateProductDto = exports.CreateProductDto =
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const swagger_1 = require("@nestjs/swagger");
-class VariantDto {
-    sku;
-    barcode;
-    color;
-    colorHex;
-    size;
-    priceOffset;
-    inventory;
-}
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'FLV-SCR-TOP-NVY-S' }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], VariantDto.prototype, "sku", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], VariantDto.prototype, "barcode", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Navy' }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], VariantDto.prototype, "color", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: '#1B2A4A' }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], VariantDto.prototype, "colorHex", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'S' }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], VariantDto.prototype, "size", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 0 }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], VariantDto.prototype, "priceOffset", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 50 }),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], VariantDto.prototype, "inventory", void 0);
 class ProductImageDto {
     url;
-    alt;
     order;
-    isMain;
+    isPrimary;
 }
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ProductImageDto.prototype, "url", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProductImageDto.prototype, "alt", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
@@ -88,82 +34,111 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], ProductImageDto.prototype, "isMain", void 0);
+], ProductImageDto.prototype, "isPrimary", void 0);
 class CreateProductDto {
     name;
-    slug;
+    tagline;
     description;
-    fabricDetails;
-    careInstructions;
-    basePrice;
-    isFeatured;
+    price;
+    sku;
+    stockQuantity;
+    size;
+    olfactoryFamily;
+    isBestSeller;
+    isNewArrival;
+    topNotes;
+    heartNotes;
+    baseNotes;
     categoryId;
-    collectionId;
-    variants;
     images;
 }
 exports.CreateProductDto = CreateProductDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Leon™ Three-Pocket Scrub Top' }),
+    (0, swagger_1.ApiProperty)({ example: 'Velvet Rose' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MaxLength)(200),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "name", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'leon-three-pocket-scrub-top' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'A romantic floral scent' }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateProductDto.prototype, "slug", void 0);
+], CreateProductDto.prototype, "tagline", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Our signature scrub top with three pockets...' }),
+    (0, swagger_1.ApiProperty)({ example: 'A luxurious blend of damask rose...' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "description", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateProductDto.prototype, "fabricDetails", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateProductDto.prototype, "careInstructions", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 48 }),
+    (0, swagger_1.ApiProperty)({ example: 125000 }),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], CreateProductDto.prototype, "basePrice", void 0);
+], CreateProductDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'VROSE-100' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "sku", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 100 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "stockQuantity", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '100ml' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "size", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'Floral' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "olfactoryFamily", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], CreateProductDto.prototype, "isFeatured", void 0);
+], CreateProductDto.prototype, "isBestSeller", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateProductDto.prototype, "isNewArrival", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateProductDto.prototype, "topNotes", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateProductDto.prototype, "heartNotes", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateProductDto.prototype, "baseNotes", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "categoryId", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateProductDto.prototype, "collectionId", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: [VariantDto] }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ValidateNested)({ each: true }),
-    (0, class_transformer_1.Type)(() => VariantDto),
-    __metadata("design:type", Array)
-], CreateProductDto.prototype, "variants", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: [ProductImageDto] }),
     (0, class_validator_1.IsOptional)(),
@@ -174,15 +149,19 @@ __decorate([
 ], CreateProductDto.prototype, "images", void 0);
 class UpdateProductDto {
     name;
-    slug;
+    tagline;
     description;
-    fabricDetails;
-    careInstructions;
-    basePrice;
-    isFeatured;
-    isActive;
+    price;
+    sku;
+    stockQuantity;
+    size;
+    olfactoryFamily;
+    isBestSeller;
+    isNewArrival;
+    topNotes;
+    heartNotes;
+    baseNotes;
     categoryId;
-    collectionId;
 }
 exports.UpdateProductDto = UpdateProductDto;
 __decorate([
@@ -197,7 +176,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateProductDto.prototype, "slug", void 0);
+], UpdateProductDto.prototype, "tagline", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
@@ -207,55 +186,78 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateProductDto.prototype, "fabricDetails", void 0);
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateProductDto.prototype, "price", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateProductDto.prototype, "careInstructions", void 0);
+], UpdateProductDto.prototype, "sku", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], UpdateProductDto.prototype, "basePrice", void 0);
+], UpdateProductDto.prototype, "stockQuantity", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateProductDto.prototype, "size", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateProductDto.prototype, "olfactoryFamily", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], UpdateProductDto.prototype, "isFeatured", void 0);
+], UpdateProductDto.prototype, "isBestSeller", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], UpdateProductDto.prototype, "isActive", void 0);
+], UpdateProductDto.prototype, "isNewArrival", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], UpdateProductDto.prototype, "topNotes", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], UpdateProductDto.prototype, "heartNotes", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: [String] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], UpdateProductDto.prototype, "baseNotes", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateProductDto.prototype, "categoryId", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateProductDto.prototype, "collectionId", void 0);
 class ProductFilterDto {
     category;
-    collection;
-    color;
-    size;
-    minPrice;
-    maxPrice;
+    isNewArrival;
+    isBestSeller;
+    olfactoryFamily;
     search;
-    sortBy;
-    isFeatured;
     page;
     limit;
 }
@@ -269,54 +271,29 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProductFilterDto.prototype, "collection", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProductFilterDto.prototype, "color", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProductFilterDto.prototype, "size", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], ProductFilterDto.prototype, "minPrice", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], ProductFilterDto.prototype, "maxPrice", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProductFilterDto.prototype, "search", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ enum: ['price_asc', 'price_desc', 'newest', 'name_asc', 'name_desc', 'bestselling'] }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProductFilterDto.prototype, "sortBy", void 0);
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_transformer_1.Type)(() => Boolean),
+    __metadata("design:type", Boolean)
+], ProductFilterDto.prototype, "isNewArrival", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     (0, class_transformer_1.Type)(() => Boolean),
     __metadata("design:type", Boolean)
-], ProductFilterDto.prototype, "isFeatured", void 0);
+], ProductFilterDto.prototype, "isBestSeller", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProductFilterDto.prototype, "olfactoryFamily", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProductFilterDto.prototype, "search", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ default: 1 }),
     (0, class_validator_1.IsOptional)(),

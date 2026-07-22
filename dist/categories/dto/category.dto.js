@@ -16,47 +16,31 @@ class CreateCategoryDto {
     name;
     slug;
     description;
-    image;
-    parentId;
 }
 exports.CreateCategoryDto = CreateCategoryDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Scrub Tops' }),
+    (0, swagger_1.ApiProperty)({ example: 'Men' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CreateCategoryDto.prototype, "name", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'scrub-tops' }),
+    (0, swagger_1.ApiProperty)({ example: 'men' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateCategoryDto.prototype, "slug", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'Premium scrub tops for healthcare professionals' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'Fragrances for men' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCategoryDto.prototype, "description", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateCategoryDto.prototype, "image", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Parent category ID for subcategories' }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateCategoryDto.prototype, "parentId", void 0);
 class UpdateCategoryDto {
     name;
     slug;
     description;
-    image;
-    parentId;
 }
 exports.UpdateCategoryDto = UpdateCategoryDto;
 __decorate([
@@ -78,16 +62,4 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateCategoryDto.prototype, "description", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "image", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "parentId", void 0);
 //# sourceMappingURL=category.dto.js.map

@@ -100,8 +100,7 @@ export class UsersService {
           firstName: true,
           lastName: true,
           role: true,
-          avatar: true,
-          isEmailVerified: true,
+
           createdAt: true,
           updatedAt: true,
         },

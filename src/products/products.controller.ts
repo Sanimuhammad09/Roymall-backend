@@ -21,6 +21,7 @@ import { Role } from '@prisma/client';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
   @Public()
   @Get()
   @ApiOperation({ summary: 'List products with filters and pagination' })
@@ -29,27 +30,10 @@ export class ProductsController {
   }
 
   @Public()
-  @Get('featured')
-  @ApiOperation({ summary: 'Get featured products' })
-  async getFeatured(@Query('limit') limit?: number) {
-    return this.productsService.getFeatured(limit);
-  }
-
-  @Public()
-  @Get(':slug')
-  @ApiOperation({ summary: 'Get product by slug' })
-  async findBySlug(@Param('slug') slug: string) {
-    return this.productsService.findBySlug(slug);
-  }
-
-  @Public()
-  @Get(':id/related')
-  @ApiOperation({ summary: 'Get related products' })
-  async getRelated(
-    @Param('id') id: string,
-    @Query('limit') limit?: number,
-  ) {
-    return this.productsService.getRelated(id, limit);
+  @Get(':id')
+  @ApiOperation({ summary: 'Get single product by ID' })
+  async findById(@Param('id') id: string) {
+    return this.productsService.findById(id);
   }
 
   @Post()
@@ -68,15 +52,6 @@ export class ProductsController {
   @ApiOperation({ summary: 'Update a product (admin only)' })
   async update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
     return this.productsService.update(id, dto);
-  }
-
-  @Put('variants/:id')
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update product variant (admin only)' })
-  async updateVariant(@Param('id') id: string, @Body() dto: { inventory: number }) {
-    return this.productsService.updateVariant(id, dto);
   }
 
   @Delete(':id')

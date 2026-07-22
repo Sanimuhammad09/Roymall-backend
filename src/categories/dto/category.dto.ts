@@ -2,31 +2,21 @@ import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCategoryDto {
-  @ApiProperty({ example: 'Scrub Tops' })
+  @ApiProperty({ example: 'Men' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   name: string;
 
-  @ApiProperty({ example: 'scrub-tops' })
+  @ApiProperty({ example: 'men' })
   @IsString()
   @IsNotEmpty()
   slug: string;
 
-  @ApiPropertyOptional({ example: 'Premium scrub tops for healthcare professionals' })
+  @ApiPropertyOptional({ example: 'Fragrances for men' })
   @IsOptional()
   @IsString()
   description?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  image?: string;
-
-  @ApiPropertyOptional({ description: 'Parent category ID for subcategories' })
-  @IsOptional()
-  @IsString()
-  parentId?: string;
 }
 
 export class UpdateCategoryDto {
@@ -45,14 +35,4 @@ export class UpdateCategoryDto {
   @IsOptional()
   @IsString()
   description?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  image?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  parentId?: string;
 }

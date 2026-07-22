@@ -11,48 +11,10 @@ import {
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-class VariantDto {
-  @ApiProperty({ example: 'FLV-SCR-TOP-NVY-S' })
-  @IsString()
-  sku: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  barcode?: string;
-
-  @ApiProperty({ example: 'Navy' })
-  @IsString()
-  color: string;
-
-  @ApiPropertyOptional({ example: '#1B2A4A' })
-  @IsOptional()
-  @IsString()
-  colorHex?: string;
-
-  @ApiProperty({ example: 'S' })
-  @IsString()
-  size: string;
-
-  @ApiPropertyOptional({ example: 0 })
-  @IsOptional()
-  @IsNumber()
-  priceOffset?: number;
-
-  @ApiProperty({ example: 50 })
-  @IsNumber()
-  inventory: number;
-}
-
 class ProductImageDto {
   @ApiProperty()
   @IsString()
   url: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  alt?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -62,60 +24,81 @@ class ProductImageDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  isMain?: boolean;
+  isPrimary?: boolean;
 }
 
 export class CreateProductDto {
-  @ApiProperty({ example: 'Leon™ Three-Pocket Scrub Top' })
+  @ApiProperty({ example: 'Velvet Rose' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
   name: string;
 
-  @ApiProperty({ example: 'leon-three-pocket-scrub-top' })
+  @ApiPropertyOptional({ example: 'A romantic floral scent' })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  slug: string;
+  tagline?: string;
 
-  @ApiProperty({ example: 'Our signature scrub top with three pockets...' })
+  @ApiProperty({ example: 'A luxurious blend of damask rose...' })
   @IsString()
   @IsNotEmpty()
   description: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  fabricDetails?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  careInstructions?: string;
-
-  @ApiProperty({ example: 48 })
+  @ApiProperty({ example: 125000 })
   @IsNumber()
-  basePrice: number;
+  price: number;
+
+  @ApiProperty({ example: 'VROSE-100' })
+  @IsString()
+  @IsNotEmpty()
+  sku: string;
+
+  @ApiPropertyOptional({ example: 100 })
+  @IsOptional()
+  @IsNumber()
+  stockQuantity?: number;
+
+  @ApiPropertyOptional({ example: '100ml' })
+  @IsOptional()
+  @IsString()
+  size?: string;
+
+  @ApiPropertyOptional({ example: 'Floral' })
+  @IsOptional()
+  @IsString()
+  olfactoryFamily?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  isFeatured?: boolean;
+  isBestSeller?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  isNewArrival?: boolean;
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  topNotes?: string[];
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  heartNotes?: string[];
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  baseNotes?: string[];
 
   @ApiProperty()
   @IsString()
   categoryId: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  collectionId?: string;
-
-  @ApiPropertyOptional({ type: [VariantDto] })
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => VariantDto)
-  variants?: VariantDto[];
 
   @ApiPropertyOptional({ type: [ProductImageDto] })
   @IsOptional()
@@ -135,7 +118,7 @@ export class UpdateProductDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  slug?: string;
+  tagline?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -144,38 +127,61 @@ export class UpdateProductDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
-  fabricDetails?: string;
+  @IsNumber()
+  price?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  careInstructions?: string;
+  sku?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
-  basePrice?: number;
+  stockQuantity?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  size?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  olfactoryFamily?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  isFeatured?: boolean;
+  isBestSeller?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isNewArrival?: boolean;
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  topNotes?: string[];
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  heartNotes?: string[];
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  baseNotes?: string[];
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   categoryId?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  collectionId?: string;
 }
 
 export class ProductFilterDto {
@@ -186,46 +192,25 @@ export class ProductFilterDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
-  collection?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  color?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  size?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  minPrice?: number;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  maxPrice?: number;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  search?: string;
-
-  @ApiPropertyOptional({ enum: ['price_asc', 'price_desc', 'newest', 'name_asc', 'name_desc', 'bestselling'] })
-  @IsOptional()
-  @IsString()
-  sortBy?: string;
+  @IsBoolean()
+  @Type(() => Boolean)
+  isNewArrival?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
-  isFeatured?: boolean;
+  isBestSeller?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  olfactoryFamily?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  search?: string;
 
   @ApiPropertyOptional({ default: 1 })
   @IsOptional()

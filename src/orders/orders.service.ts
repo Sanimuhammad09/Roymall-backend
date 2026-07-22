@@ -2,104 +2,63 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/order.dto';
 import { MailService } from '../mail/mail.service';
-import { InvoiceService } from './invoice.service';
 import { randomBytes } from 'crypto';
+import { OrderStatus } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
-    private readonly invoiceService: InvoiceService,
   ) {}
 
   async create(userId: string | undefined, dto: CreateOrderDto) {
-    // Generate a unique order number (e.g., ORD-ABC1234)
     const orderNumber = `ORD-${randomBytes(4).toString('hex').toUpperCase()}`;
 
-    // Calculate total discount (mock logic for now, this would check the coupon validity)
-    const discountAmount = 0; 
-
-    // Create the order in a transaction
     const order = await this.prisma.$transaction(async (tx) => {
-      // 1. Create the Order record
       const createdOrder = await tx.order.create({
         data: {
           orderNumber,
           userId,
-          status: 'PENDING',
+          status: OrderStatus.PENDING,
           totalAmount: dto.total,
           subtotal: dto.subtotal,
-          taxAmount: dto.tax,
+          tax: dto.tax,
           shippingCost: dto.shippingCost,
-          discountAmount,
-          couponCode: dto.couponCode,
           shippingAddress: dto.shippingAddress,
-          billingAddress: dto.shippingAddress, // Using shipping as billing for simplicity
+          billingAddress: dto.shippingAddress,
           items: {
             create: dto.items.map((item) => ({
-              variantId: item.variantId,
+              productId: item.productId,
               quantity: item.quantity,
-              unitPrice: item.price,
+              priceAtPurchase: item.price,
             })),
           },
         },
         include: {
           items: {
             include: {
-              variant: {
-                include: { product: true },
-              },
+              product: true,
             },
           },
           user: true,
         },
       });
 
-      // 2. Decrement inventory for each variant
       for (const item of dto.items) {
-        await tx.productVariant.update({
-          where: { id: item.variantId },
+        await tx.product.update({
+          where: { id: item.productId },
           data: {
-            inventory: {
+            stockQuantity: {
               decrement: item.quantity,
             },
           },
         });
-        
-        // Record stock history
-        await tx.stockHistory.create({
-          data: {
-            variantId: item.variantId,
-            quantity: -item.quantity,
-            reason: 'purchase',
-            referenceId: createdOrder.id,
-          }
-        });
       }
-
-      // 3. Create initial status history
-      await tx.orderStatusHistory.create({
-        data: {
-          orderId: createdOrder.id,
-          status: 'PENDING',
-          note: 'Order created',
-        },
-      });
-
-      // 4. Generate Invoice
-      const pdfUrl = await this.invoiceService.generateInvoice(createdOrder);
-      await tx.invoice.create({
-        data: {
-          orderId: createdOrder.id,
-          pdfUrl,
-        }
-      });
 
       return createdOrder;
     });
 
-    // Send confirmation email asynchronously (don't block the response)
     const email = order.user?.email || (dto.shippingAddress as any)?.email;
     const firstName = order.user?.firstName || (dto.shippingAddress as any)?.firstName || 'Guest';
 
@@ -121,12 +80,8 @@ export class OrdersService {
       include: {
         items: {
           include: {
-            variant: {
-              include: {
-                product: {
-                  select: { name: true, slug: true, images: { take: 1, orderBy: { order: 'asc' } } }
-                }
-              }
+            product: {
+              select: { name: true, sku: true, images: { take: 1, orderBy: { order: 'asc' } } }
             }
           }
         }
@@ -141,17 +96,11 @@ export class OrdersService {
       include: {
         items: {
           include: {
-            variant: {
-              include: {
-                product: {
-                  select: { name: true, slug: true, images: { take: 1, orderBy: { order: 'asc' } } }
-                }
-              }
+            product: {
+              select: { name: true, sku: true, images: { take: 1, orderBy: { order: 'asc' } } }
             }
           }
         },
-        statusHistory: { orderBy: { createdAt: 'desc' } },
-        payment: true,
       },
     });
 
@@ -159,7 +108,6 @@ export class OrdersService {
     return order;
   }
 
-  // Admin methods
   async findAllAdmin() {
     return this.prisma.order.findMany({
       orderBy: { createdAt: 'desc' },
@@ -167,25 +115,13 @@ export class OrdersService {
     });
   }
 
-  async updateStatus(id: string, status: any, note?: string) {
+  async updateStatus(id: string, status: OrderStatus) {
     const order = await this.prisma.order.findUnique({ where: { id } });
     if (!order) throw new NotFoundException('Order not found');
 
-    return this.prisma.$transaction(async (tx) => {
-      const updatedOrder = await tx.order.update({
-        where: { id },
-        data: { status },
-      });
-
-      await tx.orderStatusHistory.create({
-        data: {
-          orderId: id,
-          status,
-          note,
-        },
-      });
-
-      return updatedOrder;
+    return this.prisma.order.update({
+      where: { id },
+      data: { status },
     });
   }
 }

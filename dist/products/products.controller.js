@@ -29,23 +29,14 @@ let ProductsController = class ProductsController {
     async findAll(filters) {
         return this.productsService.findAll(filters);
     }
-    async getFeatured(limit) {
-        return this.productsService.getFeatured(limit);
-    }
-    async findBySlug(slug) {
-        return this.productsService.findBySlug(slug);
-    }
-    async getRelated(id, limit) {
-        return this.productsService.getRelated(id, limit);
+    async findById(id) {
+        return this.productsService.findById(id);
     }
     async create(dto) {
         return this.productsService.create(dto);
     }
     async update(id, dto) {
         return this.productsService.update(id, dto);
-    }
-    async updateVariant(id, dto) {
-        return this.productsService.updateVariant(id, dto);
     }
     async remove(id) {
         return this.productsService.remove(id);
@@ -63,32 +54,13 @@ __decorate([
 ], ProductsController.prototype, "findAll", null);
 __decorate([
     (0, public_decorator_1.Public)(),
-    (0, common_1.Get)('featured'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get featured products' }),
-    __param(0, (0, common_1.Query)('limit')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], ProductsController.prototype, "getFeatured", null);
-__decorate([
-    (0, public_decorator_1.Public)(),
-    (0, common_1.Get)(':slug'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get product by slug' }),
-    __param(0, (0, common_1.Param)('slug')),
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get single product by ID' }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], ProductsController.prototype, "findBySlug", null);
-__decorate([
-    (0, public_decorator_1.Public)(),
-    (0, common_1.Get)(':id/related'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get related products' }),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Query)('limit')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
-    __metadata("design:returntype", Promise)
-], ProductsController.prototype, "getRelated", null);
+], ProductsController.prototype, "findById", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
@@ -112,18 +84,6 @@ __decorate([
     __metadata("design:paramtypes", [String, product_dto_1.UpdateProductDto]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "update", null);
-__decorate([
-    (0, common_1.Put)('variants/:id'),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Update product variant (admin only)' }),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], ProductsController.prototype, "updateVariant", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),

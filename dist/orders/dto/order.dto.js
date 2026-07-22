@@ -15,7 +15,7 @@ const class_transformer_1 = require("class-transformer");
 const client_1 = require("@prisma/client");
 const swagger_1 = require("@nestjs/swagger");
 class OrderItemDto {
-    variantId;
+    productId;
     quantity;
     price;
 }
@@ -23,7 +23,7 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], OrderItemDto.prototype, "variantId", void 0);
+], OrderItemDto.prototype, "productId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNumber)(),
@@ -41,8 +41,6 @@ class CreateOrderDto {
     tax;
     shippingCost;
     total;
-    couponCode;
-    discountAmount;
 }
 exports.CreateOrderDto = CreateOrderDto;
 __decorate([
@@ -77,21 +75,8 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateOrderDto.prototype, "total", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateOrderDto.prototype, "couponCode", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateOrderDto.prototype, "discountAmount", void 0);
 class UpdateOrderStatusDto {
     status;
-    note;
 }
 exports.UpdateOrderStatusDto = UpdateOrderStatusDto;
 __decorate([
@@ -99,10 +84,4 @@ __decorate([
     (0, class_validator_1.IsEnum)(client_1.OrderStatus),
     __metadata("design:type", String)
 ], UpdateOrderStatusDto.prototype, "status", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateOrderStatusDto.prototype, "note", void 0);
 //# sourceMappingURL=order.dto.js.map

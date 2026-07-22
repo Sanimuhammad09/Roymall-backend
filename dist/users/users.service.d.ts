@@ -27,8 +27,6 @@ export declare class UsersService {
             firstName: string;
             lastName: string;
             role: import(".prisma/client").$Enums.Role;
-            isEmailVerified: boolean;
-            avatar: string | null;
             createdAt: Date;
             updatedAt: Date;
         }[];

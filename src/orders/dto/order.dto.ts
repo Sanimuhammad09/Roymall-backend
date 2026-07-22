@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 class OrderItemDto {
   @ApiProperty()
   @IsString()
-  variantId: string;
+  productId: string;
 
   @ApiProperty()
   @IsNumber()
@@ -26,7 +26,7 @@ export class CreateOrderDto {
 
   @ApiProperty()
   @IsObject()
-  shippingAddress: any; // We can type this more strictly later if needed
+  shippingAddress: any; 
 
   @ApiProperty()
   @IsNumber()
@@ -43,25 +43,10 @@ export class CreateOrderDto {
   @ApiProperty()
   @IsNumber()
   total: number;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  couponCode?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNumber()
-  discountAmount?: number;
 }
 
 export class UpdateOrderStatusDto {
   @ApiProperty({ enum: OrderStatus })
   @IsEnum(OrderStatus)
   status: OrderStatus;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  note?: string;
 }

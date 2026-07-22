@@ -1,6 +1,6 @@
 import { OrderStatus } from '@prisma/client';
 declare class OrderItemDto {
-    variantId: string;
+    productId: string;
     quantity: number;
     price: number;
 }
@@ -11,11 +11,8 @@ export declare class CreateOrderDto {
     tax: number;
     shippingCost: number;
     total: number;
-    couponCode?: string;
-    discountAmount?: number;
 }
 export declare class UpdateOrderStatusDto {
     status: OrderStatus;
-    note?: string;
 }
 export {};

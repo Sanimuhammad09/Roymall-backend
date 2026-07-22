@@ -1,53 +1,47 @@
-declare class VariantDto {
-    sku: string;
-    barcode?: string;
-    color: string;
-    colorHex?: string;
-    size: string;
-    priceOffset?: number;
-    inventory: number;
-}
 declare class ProductImageDto {
     url: string;
-    alt?: string;
     order?: number;
-    isMain?: boolean;
+    isPrimary?: boolean;
 }
 export declare class CreateProductDto {
     name: string;
-    slug: string;
+    tagline?: string;
     description: string;
-    fabricDetails?: string;
-    careInstructions?: string;
-    basePrice: number;
-    isFeatured?: boolean;
+    price: number;
+    sku: string;
+    stockQuantity?: number;
+    size?: string;
+    olfactoryFamily?: string;
+    isBestSeller?: boolean;
+    isNewArrival?: boolean;
+    topNotes?: string[];
+    heartNotes?: string[];
+    baseNotes?: string[];
     categoryId: string;
-    collectionId?: string;
-    variants?: VariantDto[];
     images?: ProductImageDto[];
 }
 export declare class UpdateProductDto {
     name?: string;
-    slug?: string;
+    tagline?: string;
     description?: string;
-    fabricDetails?: string;
-    careInstructions?: string;
-    basePrice?: number;
-    isFeatured?: boolean;
-    isActive?: boolean;
+    price?: number;
+    sku?: string;
+    stockQuantity?: number;
+    size?: string;
+    olfactoryFamily?: string;
+    isBestSeller?: boolean;
+    isNewArrival?: boolean;
+    topNotes?: string[];
+    heartNotes?: string[];
+    baseNotes?: string[];
     categoryId?: string;
-    collectionId?: string;
 }
 export declare class ProductFilterDto {
     category?: string;
-    collection?: string;
-    color?: string;
-    size?: string;
-    minPrice?: number;
-    maxPrice?: number;
+    isNewArrival?: boolean;
+    isBestSeller?: boolean;
+    olfactoryFamily?: string;
     search?: string;
-    sortBy?: string;
-    isFeatured?: boolean;
     page?: number;
     limit?: number;
 }

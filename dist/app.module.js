@@ -23,12 +23,9 @@ const categories_module_1 = require("./categories/categories.module");
 const jwt_auth_guard_1 = require("./common/guards/jwt-auth.guard");
 const orders_module_1 = require("./orders/orders.module");
 const payments_module_1 = require("./payments/payments.module");
-const wishlist_module_1 = require("./wishlist/wishlist.module");
-const coupons_module_1 = require("./coupons/coupons.module");
-const waitlist_module_1 = require("./waitlist/waitlist.module");
-const fit_profile_module_1 = require("./fit-profile/fit-profile.module");
-const dashboard_module_1 = require("./dashboard/dashboard.module");
-const store_settings_module_1 = require("./store-settings/store-settings.module");
+const cart_module_1 = require("./cart/cart.module");
+const appointments_module_1 = require("./appointments/appointments.module");
+const inquiries_module_1 = require("./inquiries/inquiries.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -47,12 +44,9 @@ exports.AppModule = AppModule = __decorate([
             categories_module_1.CategoriesModule,
             orders_module_1.OrdersModule,
             payments_module_1.PaymentsModule,
-            wishlist_module_1.WishlistModule,
-            coupons_module_1.CouponsModule,
-            waitlist_module_1.WaitlistModule,
-            fit_profile_module_1.FitProfileModule,
-            dashboard_module_1.DashboardModule,
-            store_settings_module_1.StoreSettingsModule,
+            cart_module_1.CartModule,
+            appointments_module_1.AppointmentsModule,
+            inquiries_module_1.InquiriesModule,
         ],
         providers: [
             {

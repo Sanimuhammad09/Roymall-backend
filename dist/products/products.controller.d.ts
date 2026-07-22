@@ -9,39 +9,31 @@ export declare class ProductsController {
                 name: string;
                 slug: string;
             };
-            variants: {
-                id: string;
-                color: string;
-                colorHex: string | null;
-                size: string;
-                priceOffset: number;
-                inventory: number;
-            }[];
             images: {
                 order: number;
                 id: string;
                 url: string;
-                alt: string | null;
-                isMain: boolean;
+                isPrimary: boolean;
                 productId: string;
             }[];
-            _count: {
-                reviews: number;
-            };
         } & {
+            name: string;
             id: string;
-            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
-            slug: string;
             description: string;
-            fabricDetails: string | null;
-            careInstructions: string | null;
-            basePrice: number;
-            isFeatured: boolean;
+            tagline: string | null;
+            price: number;
+            sku: string;
+            stockQuantity: number;
+            size: string | null;
+            olfactoryFamily: string | null;
+            isBestSeller: boolean;
+            isNewArrival: boolean;
+            topNotes: string[];
+            heartNotes: string[];
+            baseNotes: string[];
             categoryId: string;
-            collectionId: string | null;
         })[];
         meta: {
             total: number;
@@ -50,285 +42,128 @@ export declare class ProductsController {
             totalPages: number;
         };
     }>;
-    getFeatured(limit?: number): Promise<({
-        variants: {
-            color: string;
-            colorHex: string | null;
-        }[];
-        images: {
-            order: number;
-            id: string;
-            url: string;
-            alt: string | null;
-            isMain: boolean;
-            productId: string;
-        }[];
-    } & {
-        id: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        name: string;
-        slug: string;
-        description: string;
-        fabricDetails: string | null;
-        careInstructions: string | null;
-        basePrice: number;
-        isFeatured: boolean;
-        categoryId: string;
-        collectionId: string | null;
-    })[]>;
-    findBySlug(slug: string): Promise<{
+    findById(id: string): Promise<{
         category: {
+            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
-            slug: string;
             description: string | null;
-            image: string | null;
-            parentId: string | null;
+            slug: string;
         };
-        collection: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-        } | null;
-        reviews: ({
-            user: {
-                firstName: string;
-                lastName: string;
-                avatar: string | null;
-            };
-        } & {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            userId: string;
-            rating: number;
-            title: string | null;
-            content: string;
-            isApproved: boolean;
-            productId: string;
-        })[];
-        variants: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            sku: string;
-            barcode: string | null;
-            color: string;
-            colorHex: string | null;
-            size: string;
-            priceOffset: number;
-            inventory: number;
-            productId: string;
-        }[];
         images: {
             order: number;
             id: string;
             url: string;
-            alt: string | null;
-            isMain: boolean;
+            isPrimary: boolean;
             productId: string;
         }[];
-        videos: {
-            order: number;
-            id: string;
-            url: string;
-            productId: string;
-            thumbnail: string | null;
-        }[];
-        _count: {
-            reviews: number;
-        };
     } & {
+        name: string;
         id: string;
-        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string;
-        fabricDetails: string | null;
-        careInstructions: string | null;
-        basePrice: number;
-        isFeatured: boolean;
+        tagline: string | null;
+        price: number;
+        sku: string;
+        stockQuantity: number;
+        size: string | null;
+        olfactoryFamily: string | null;
+        isBestSeller: boolean;
+        isNewArrival: boolean;
+        topNotes: string[];
+        heartNotes: string[];
+        baseNotes: string[];
         categoryId: string;
-        collectionId: string | null;
     }>;
-    getRelated(id: string, limit?: number): Promise<({
-        variants: {
-            color: string;
-            colorHex: string | null;
-        }[];
-        images: {
-            order: number;
-            id: string;
-            url: string;
-            alt: string | null;
-            isMain: boolean;
-            productId: string;
-        }[];
-    } & {
-        id: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        name: string;
-        slug: string;
-        description: string;
-        fabricDetails: string | null;
-        careInstructions: string | null;
-        basePrice: number;
-        isFeatured: boolean;
-        categoryId: string;
-        collectionId: string | null;
-    })[]>;
     create(dto: CreateProductDto): Promise<{
         category: {
+            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
-            slug: string;
             description: string | null;
-            image: string | null;
-            parentId: string | null;
+            slug: string;
         };
-        collection: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-        } | null;
-        variants: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            sku: string;
-            barcode: string | null;
-            color: string;
-            colorHex: string | null;
-            size: string;
-            priceOffset: number;
-            inventory: number;
-            productId: string;
-        }[];
         images: {
             order: number;
             id: string;
             url: string;
-            alt: string | null;
-            isMain: boolean;
+            isPrimary: boolean;
             productId: string;
         }[];
     } & {
+        name: string;
         id: string;
-        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string;
-        fabricDetails: string | null;
-        careInstructions: string | null;
-        basePrice: number;
-        isFeatured: boolean;
+        tagline: string | null;
+        price: number;
+        sku: string;
+        stockQuantity: number;
+        size: string | null;
+        olfactoryFamily: string | null;
+        isBestSeller: boolean;
+        isNewArrival: boolean;
+        topNotes: string[];
+        heartNotes: string[];
+        baseNotes: string[];
         categoryId: string;
-        collectionId: string | null;
     }>;
     update(id: string, dto: UpdateProductDto): Promise<{
         category: {
+            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
-            slug: string;
             description: string | null;
-            image: string | null;
-            parentId: string | null;
+            slug: string;
         };
-        collection: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-        } | null;
-        variants: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            sku: string;
-            barcode: string | null;
-            color: string;
-            colorHex: string | null;
-            size: string;
-            priceOffset: number;
-            inventory: number;
-            productId: string;
-        }[];
         images: {
             order: number;
             id: string;
             url: string;
-            alt: string | null;
-            isMain: boolean;
+            isPrimary: boolean;
             productId: string;
         }[];
     } & {
-        id: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         name: string;
-        slug: string;
-        description: string;
-        fabricDetails: string | null;
-        careInstructions: string | null;
-        basePrice: number;
-        isFeatured: boolean;
-        categoryId: string;
-        collectionId: string | null;
-    }>;
-    updateVariant(id: string, dto: {
-        inventory: number;
-    }): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string;
+        tagline: string | null;
+        price: number;
         sku: string;
-        barcode: string | null;
-        color: string;
-        colorHex: string | null;
-        size: string;
-        priceOffset: number;
-        inventory: number;
-        productId: string;
+        stockQuantity: number;
+        size: string | null;
+        olfactoryFamily: string | null;
+        isBestSeller: boolean;
+        isNewArrival: boolean;
+        topNotes: string[];
+        heartNotes: string[];
+        baseNotes: string[];
+        categoryId: string;
     }>;
     remove(id: string): Promise<{
+        name: string;
         id: string;
-        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string;
-        fabricDetails: string | null;
-        careInstructions: string | null;
-        basePrice: number;
-        isFeatured: boolean;
+        tagline: string | null;
+        price: number;
+        sku: string;
+        stockQuantity: number;
+        size: string | null;
+        olfactoryFamily: string | null;
+        isBestSeller: boolean;
+        isNewArrival: boolean;
+        topNotes: string[];
+        heartNotes: string[];
+        baseNotes: string[];
         categoryId: string;
-        collectionId: string | null;
     }>;
 }

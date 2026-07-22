@@ -51,6 +51,7 @@ const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../prisma/prisma.service");
 const stripe_1 = __importDefault(require("stripe"));
 const crypto = __importStar(require("crypto"));
+const client_1 = require("@prisma/client");
 let PaymentsService = class PaymentsService {
     configService;
     prisma;
@@ -98,40 +99,12 @@ let PaymentsService = class PaymentsService {
         switch (event.type) {
             case 'payment_intent.succeeded':
                 const paymentIntent = event.data.object;
-                await this.handlePaymentSuccess(paymentIntent);
+                await this.handlePaymentSuccess(paymentIntent.metadata.orderId);
                 break;
             default:
                 console.log(`Unhandled event type ${event.type}`);
         }
         return { received: true };
-    }
-    async handlePaymentSuccess(paymentIntent) {
-        const orderId = paymentIntent.metadata.orderId;
-        if (!orderId)
-            return;
-        await this.prisma.$transaction(async (tx) => {
-            await tx.payment.create({
-                data: {
-                    orderId,
-                    provider: 'stripe',
-                    transactionId: paymentIntent.id,
-                    amount: paymentIntent.amount / 100,
-                    currency: paymentIntent.currency.toUpperCase(),
-                    status: 'succeeded',
-                },
-            });
-            await tx.order.update({
-                where: { id: orderId },
-                data: { status: 'CONFIRMED' },
-            });
-            await tx.orderStatusHistory.create({
-                data: {
-                    orderId,
-                    status: 'CONFIRMED',
-                    note: 'Payment received via Stripe',
-                },
-            });
-        });
     }
     async initializePaystackTransaction(orderId, amount, paymentMethod = 'card') {
         const paystackSecretKey = this.configService.get('PAYSTACK_SECRET_KEY');
@@ -192,45 +165,22 @@ let PaymentsService = class PaymentsService {
         const data = payload.data;
         switch (event) {
             case 'charge.success':
-                await this.handlePaystackSuccess(data);
+                await this.handlePaymentSuccess(data.reference);
                 break;
             default:
                 console.log(`Unhandled Paystack event type: ${event}`);
         }
         return { received: true };
     }
-    async handlePaystackSuccess(data) {
-        const orderId = data.reference;
+    async handlePaymentSuccess(orderId) {
         if (!orderId)
             return;
         const order = await this.prisma.order.findUnique({ where: { id: orderId } });
-        if (!order || order.status === 'CONFIRMED')
+        if (!order || order.status === client_1.OrderStatus.PROCESSING)
             return;
-        await this.prisma.$transaction(async (tx) => {
-            const existingPayment = await tx.payment.findUnique({ where: { transactionId: String(data.id) } });
-            if (!existingPayment) {
-                await tx.payment.create({
-                    data: {
-                        orderId,
-                        provider: 'paystack',
-                        transactionId: String(data.id),
-                        amount: data.amount / 100,
-                        currency: data.currency.toUpperCase(),
-                        status: 'succeeded',
-                    },
-                });
-            }
-            await tx.order.update({
-                where: { id: orderId },
-                data: { status: 'CONFIRMED' },
-            });
-            await tx.orderStatusHistory.create({
-                data: {
-                    orderId,
-                    status: 'CONFIRMED',
-                    note: 'Payment received via Paystack (incl. Bank Transfer)',
-                },
-            });
+        await this.prisma.order.update({
+            where: { id: orderId },
+            data: { status: client_1.OrderStatus.PROCESSING },
         });
     }
 };

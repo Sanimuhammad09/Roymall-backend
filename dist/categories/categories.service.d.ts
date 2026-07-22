@@ -4,136 +4,59 @@ export declare class CategoriesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateCategoryDto): Promise<{
+        name: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string | null;
-        image: string | null;
-        parentId: string | null;
+        slug: string;
     }>;
     findAll(): Promise<({
-        children: ({
-            children: {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                name: string;
-                slug: string;
-                description: string | null;
-                image: string | null;
-                parentId: string | null;
-            }[];
-            _count: {
-                products: number;
-            };
-        } & {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-            parentId: string | null;
-        })[];
         _count: {
             products: number;
         };
     } & {
+        name: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string | null;
-        image: string | null;
-        parentId: string | null;
+        slug: string;
     })[]>;
     findBySlug(slug: string): Promise<{
-        parent: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-            parentId: string | null;
-        } | null;
-        children: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-            parentId: string | null;
-        }[];
         _count: {
             products: number;
         };
     } & {
+        name: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string | null;
-        image: string | null;
-        parentId: string | null;
+        slug: string;
     }>;
     findById(id: string): Promise<{
-        parent: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-            parentId: string | null;
-        } | null;
-        children: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            image: string | null;
-            parentId: string | null;
-        }[];
-    } & {
+        name: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string | null;
-        image: string | null;
-        parentId: string | null;
+        slug: string;
     }>;
     update(id: string, dto: UpdateCategoryDto): Promise<{
+        name: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string | null;
-        image: string | null;
-        parentId: string | null;
+        slug: string;
     }>;
     remove(id: string): Promise<{
+        name: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        slug: string;
         description: string | null;
-        image: string | null;
-        parentId: string | null;
+        slug: string;
     }>;
 }

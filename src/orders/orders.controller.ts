@@ -1,58 +1,67 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+  Put,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/order.dto';
+import { CreateOrderDto, UpdateOrderStatusDto } from './dto/order.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
-
-import { OptionalJwtAuthGuard } from '../common/guards/optional-jwt-auth.guard';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('orders')
 @Controller('orders')
-@ApiBearerAuth()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @Public()
   @Post()
-  @UseGuards(OptionalJwtAuthGuard)
-  @ApiOperation({ summary: 'Create a new order from checkout' })
-  async create(@CurrentUser() user: any, @Body() dto: CreateOrderDto) {
-    return this.ordersService.create(user?.id, dto);
+  @ApiOperation({ summary: 'Create a new order' })
+  async create(@Req() req: any, @Body() dto: CreateOrderDto) {
+    const userId = req.user?.id;
+    return this.ordersService.create(userId, dto);
   }
 
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get all orders for the current user' })
-  async findMine(@CurrentUser() user: any) {
-    return this.ordersService.findByUser(user.id);
+  @Get('me')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user orders' })
+  async findMyOrders(@Req() req: any) {
+    return this.ordersService.findByUser(req.user.id);
+  }
+
+  @Get(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get specific order' })
+  async findOne(@Param('id') id: string, @Req() req: any) {
+    return this.ordersService.findOne(id, req.user.id);
   }
 
   @Get('admin/all')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all orders (admin only)' })
   async findAllAdmin() {
     return this.ordersService.findAllAdmin();
   }
 
-  @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get a specific order by ID' })
-  async findOne(@CurrentUser() user: any, @Param('id') id: string) {
-    return this.ordersService.findOne(id, user.id);
-  }
-
-  @Post('admin/:id/status')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put('admin/:id/status')
+  @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update order status (admin only)' })
   async updateStatus(
     @Param('id') id: string,
-    @Body() dto: import('./dto/order.dto').UpdateOrderStatusDto,
+    @Body() dto: UpdateOrderStatusDto,
   ) {
-    return this.ordersService.updateStatus(id, dto.status, dto.note);
+    return this.ordersService.updateStatus(id, dto.status);
   }
 }

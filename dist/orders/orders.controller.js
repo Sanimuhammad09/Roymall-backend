@@ -17,87 +17,87 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const orders_service_1 = require("./orders.service");
 const order_dto_1 = require("./dto/order.dto");
-const jwt_auth_guard_1 = require("../common/guards/jwt-auth.guard");
-const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const roles_guard_1 = require("../common/guards/roles.guard");
-const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
+const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const client_1 = require("@prisma/client");
-const optional_jwt_auth_guard_1 = require("../common/guards/optional-jwt-auth.guard");
+const public_decorator_1 = require("../common/decorators/public.decorator");
 let OrdersController = class OrdersController {
     ordersService;
     constructor(ordersService) {
         this.ordersService = ordersService;
     }
-    async create(user, dto) {
-        return this.ordersService.create(user?.id, dto);
+    async create(req, dto) {
+        const userId = req.user?.id;
+        return this.ordersService.create(userId, dto);
     }
-    async findMine(user) {
-        return this.ordersService.findByUser(user.id);
+    async findMyOrders(req) {
+        return this.ordersService.findByUser(req.user.id);
+    }
+    async findOne(id, req) {
+        return this.ordersService.findOne(id, req.user.id);
     }
     async findAllAdmin() {
         return this.ordersService.findAllAdmin();
     }
-    async findOne(user, id) {
-        return this.ordersService.findOne(id, user.id);
-    }
     async updateStatus(id, dto) {
-        return this.ordersService.updateStatus(id, dto.status, dto.note);
+        return this.ordersService.updateStatus(id, dto.status);
     }
 };
 exports.OrdersController = OrdersController;
 __decorate([
+    (0, public_decorator_1.Public)(),
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(optional_jwt_auth_guard_1.OptionalJwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Create a new order from checkout' }),
-    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new order' }),
+    __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, order_dto_1.CreateOrderDto]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Get all orders for the current user' }),
-    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    (0, common_1.Get)('me'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get current user orders' }),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], OrdersController.prototype, "findMine", null);
+], OrdersController.prototype, "findMyOrders", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get specific order' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Get)('admin/all'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get all orders (admin only)' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "findAllAdmin", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Get a specific order by ID' }),
-    __param(0, (0, current_user_decorator_1.CurrentUser)()),
-    __param(1, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], OrdersController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Post)('admin/:id/status'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, common_1.Put)('admin/:id/status'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Update order status (admin only)' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, order_dto_1.UpdateOrderStatusDto]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "updateStatus", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, swagger_1.ApiTags)('orders'),
     (0, common_1.Controller)('orders'),
-    (0, swagger_1.ApiBearerAuth)(),
     __metadata("design:paramtypes", [orders_service_1.OrdersService])
 ], OrdersController);
 //# sourceMappingURL=orders.controller.js.map

@@ -13,85 +13,56 @@ exports.OrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const mail_service_1 = require("../mail/mail.service");
-const invoice_service_1 = require("./invoice.service");
 const crypto_1 = require("crypto");
+const client_1 = require("@prisma/client");
 let OrdersService = class OrdersService {
     prisma;
     mailService;
-    invoiceService;
-    constructor(prisma, mailService, invoiceService) {
+    constructor(prisma, mailService) {
         this.prisma = prisma;
         this.mailService = mailService;
-        this.invoiceService = invoiceService;
     }
     async create(userId, dto) {
         const orderNumber = `ORD-${(0, crypto_1.randomBytes)(4).toString('hex').toUpperCase()}`;
-        const discountAmount = 0;
         const order = await this.prisma.$transaction(async (tx) => {
             const createdOrder = await tx.order.create({
                 data: {
                     orderNumber,
                     userId,
-                    status: 'PENDING',
+                    status: client_1.OrderStatus.PENDING,
                     totalAmount: dto.total,
                     subtotal: dto.subtotal,
-                    taxAmount: dto.tax,
+                    tax: dto.tax,
                     shippingCost: dto.shippingCost,
-                    discountAmount,
-                    couponCode: dto.couponCode,
                     shippingAddress: dto.shippingAddress,
                     billingAddress: dto.shippingAddress,
                     items: {
                         create: dto.items.map((item) => ({
-                            variantId: item.variantId,
+                            productId: item.productId,
                             quantity: item.quantity,
-                            unitPrice: item.price,
+                            priceAtPurchase: item.price,
                         })),
                     },
                 },
                 include: {
                     items: {
                         include: {
-                            variant: {
-                                include: { product: true },
-                            },
+                            product: true,
                         },
                     },
                     user: true,
                 },
             });
             for (const item of dto.items) {
-                await tx.productVariant.update({
-                    where: { id: item.variantId },
+                await tx.product.update({
+                    where: { id: item.productId },
                     data: {
-                        inventory: {
+                        stockQuantity: {
                             decrement: item.quantity,
                         },
                     },
                 });
-                await tx.stockHistory.create({
-                    data: {
-                        variantId: item.variantId,
-                        quantity: -item.quantity,
-                        reason: 'purchase',
-                        referenceId: createdOrder.id,
-                    }
-                });
             }
-            await tx.orderStatusHistory.create({
-                data: {
-                    orderId: createdOrder.id,
-                    status: 'PENDING',
-                    note: 'Order created',
-                },
-            });
-            const pdfUrl = await this.invoiceService.generateInvoice(createdOrder);
-            await tx.invoice.create({
-                data: {
-                    orderId: createdOrder.id,
-                    pdfUrl,
-                }
-            });
             return createdOrder;
         });
         const email = order.user?.email || dto.shippingAddress?.email;
@@ -107,12 +78,8 @@ let OrdersService = class OrdersService {
             include: {
                 items: {
                     include: {
-                        variant: {
-                            include: {
-                                product: {
-                                    select: { name: true, slug: true, images: { take: 1, orderBy: { order: 'asc' } } }
-                                }
-                            }
+                        product: {
+                            select: { name: true, sku: true, images: { take: 1, orderBy: { order: 'asc' } } }
                         }
                     }
                 }
@@ -126,17 +93,11 @@ let OrdersService = class OrdersService {
             include: {
                 items: {
                     include: {
-                        variant: {
-                            include: {
-                                product: {
-                                    select: { name: true, slug: true, images: { take: 1, orderBy: { order: 'asc' } } }
-                                }
-                            }
+                        product: {
+                            select: { name: true, sku: true, images: { take: 1, orderBy: { order: 'asc' } } }
                         }
                     }
                 },
-                statusHistory: { orderBy: { createdAt: 'desc' } },
-                payment: true,
             },
         });
         if (!order)
@@ -149,23 +110,13 @@ let OrdersService = class OrdersService {
             include: { user: { select: { firstName: true, lastName: true, email: true } } },
         });
     }
-    async updateStatus(id, status, note) {
+    async updateStatus(id, status) {
         const order = await this.prisma.order.findUnique({ where: { id } });
         if (!order)
             throw new common_1.NotFoundException('Order not found');
-        return this.prisma.$transaction(async (tx) => {
-            const updatedOrder = await tx.order.update({
-                where: { id },
-                data: { status },
-            });
-            await tx.orderStatusHistory.create({
-                data: {
-                    orderId: id,
-                    status,
-                    note,
-                },
-            });
-            return updatedOrder;
+        return this.prisma.order.update({
+            where: { id },
+            data: { status },
         });
     }
 };
@@ -173,7 +124,6 @@ exports.OrdersService = OrdersService;
 exports.OrdersService = OrdersService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        mail_service_1.MailService,
-        invoice_service_1.InvoiceService])
+        mail_service_1.MailService])
 ], OrdersService);
 //# sourceMappingURL=orders.service.js.map

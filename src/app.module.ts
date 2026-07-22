@@ -11,12 +11,10 @@ import { CategoriesModule } from './categories/categories.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
-import { WishlistModule } from './wishlist/wishlist.module';
-import { CouponsModule } from './coupons/coupons.module';
-import { WaitlistModule } from './waitlist/waitlist.module';
-import { FitProfileModule } from './fit-profile/fit-profile.module';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { StoreSettingsModule } from './store-settings/store-settings.module';
+import { CartModule } from './cart/cart.module';
+import { AppointmentsModule } from './appointments/appointments.module';
+import { InquiriesModule } from './inquiries/inquiries.module';
+
 
 @Module({
   imports: [
@@ -32,12 +30,9 @@ import { StoreSettingsModule } from './store-settings/store-settings.module';
     CategoriesModule,
     OrdersModule,
     PaymentsModule,
-    WishlistModule,
-    CouponsModule,
-    WaitlistModule,
-    FitProfileModule,
-    DashboardModule,
-    StoreSettingsModule,
+    CartModule,
+    AppointmentsModule,
+    InquiriesModule,
   ],
   providers: [
     // Apply JWT guard globally — use @Public() to exempt routes

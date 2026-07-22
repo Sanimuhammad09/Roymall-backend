@@ -22,14 +22,7 @@ let CategoriesService = class CategoriesService {
     }
     async findAll() {
         return this.prisma.category.findMany({
-            where: { parentId: null },
             include: {
-                children: {
-                    include: {
-                        children: true,
-                        _count: { select: { products: true } },
-                    },
-                },
                 _count: { select: { products: true } },
             },
             orderBy: { name: 'asc' },
@@ -39,8 +32,6 @@ let CategoriesService = class CategoriesService {
         const category = await this.prisma.category.findUnique({
             where: { slug },
             include: {
-                children: true,
-                parent: true,
                 _count: { select: { products: true } },
             },
         });
@@ -51,7 +42,6 @@ let CategoriesService = class CategoriesService {
     async findById(id) {
         const category = await this.prisma.category.findUnique({
             where: { id },
-            include: { children: true, parent: true },
         });
         if (!category)
             throw new common_1.NotFoundException('Category not found');
