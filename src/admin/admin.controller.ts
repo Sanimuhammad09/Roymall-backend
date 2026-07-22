@@ -1,9 +1,10 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Put, Body, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { UpdateStoreSettingsDto } from './dto/store-settings.dto';
 
 @ApiTags('admin')
 @Controller('admin')
@@ -26,4 +27,17 @@ export class AdminController {
     
     return this.adminService.getOverviewMetrics(start, end);
   }
+
+  @Get('settings')
+  @ApiOperation({ summary: 'Get global store settings' })
+  async getSettings() {
+    return this.adminService.getSettings();
+  }
+
+  @Put('settings')
+  @ApiOperation({ summary: 'Update global store settings' })
+  async updateSettings(@Body() dto: UpdateStoreSettingsDto) {
+    return this.adminService.updateSettings(dto);
+  }
 }
+

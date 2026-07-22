@@ -231,3 +231,19 @@ model Inquiry {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
+
+// ---------------------------------------------------------
+// Store Settings
+// ---------------------------------------------------------
+model StoreSetting {
+  id                String   @id @default(cuid())
+  storeName         String
+  supportEmail      String
+  contactPhone      String
+  storeAddress      String
+  taxRate           Float
+  currency          String   @default("NGN")
+  enablePromotions  Boolean  @default(false)
+  promoBannerText   String?
+  updatedAt         DateTime @updatedAt
+}

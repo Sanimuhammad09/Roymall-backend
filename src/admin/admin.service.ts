@@ -63,4 +63,35 @@ export class AdminService {
       recentOrders,
     };
   }
+
+  async getSettings() {
+    let settings = await this.prisma.storeSetting.findFirst();
+    
+    if (!settings) {
+      settings = await this.prisma.storeSetting.create({
+        data: {
+          storeName: 'Roymall Scents',
+          supportEmail: 'support@roymallscents.com',
+          contactPhone: '+234 123 4567 890',
+          storeAddress: '123 Fragrance Lane, Lagos',
+          taxRate: 7.5,
+          currency: 'NGN',
+          enablePromotions: true,
+          promoBannerText: 'Enjoy 20% off all Oud collections this week!',
+        },
+      });
+    }
+
+    return settings;
+  }
+
+  async updateSettings(data: any) {
+    const settings = await this.getSettings();
+    
+    return this.prisma.storeSetting.update({
+      where: { id: settings.id },
+      data,
+    });
+  }
 }
+
