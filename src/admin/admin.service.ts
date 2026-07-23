@@ -78,6 +78,12 @@ export class AdminService {
           currency: 'NGN',
           enablePromotions: true,
           promoBannerText: 'Enjoy 20% off all Oud collections this week!',
+          stripePublicKey: '',
+          stripeSecretKey: '',
+          paypalClientId: '',
+          paymentMinTrans: 2500,
+          paymentMaxTrans: 5000000,
+          paymentServiceFee: 0,
         },
       });
     }
@@ -91,6 +97,75 @@ export class AdminService {
     return this.prisma.storeSetting.update({
       where: { id: settings.id },
       data,
+    });
+  }
+
+  // --- Shipping Zones ---
+  async getShippingZones() {
+    return this.prisma.shippingZone.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async createShippingZone(data: any) {
+    return this.prisma.shippingZone.create({ data });
+  }
+
+  async updateShippingZone(id: string, data: any) {
+    return this.prisma.shippingZone.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async deleteShippingZone(id: string) {
+    return this.prisma.shippingZone.delete({
+      where: { id }
+    });
+  }
+
+  // --- Admin Users ---
+  async getAdminUsers() {
+    return this.prisma.user.findMany({
+      where: { role: Role.ADMIN },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        isActive: true,
+        createdAt: true,
+      }
+    });
+  }
+
+  async inviteAdminUser(data: { email: string, firstName: string, lastName: string }) {
+    const existing = await this.prisma.user.findUnique({ where: { email: data.email } });
+    if (existing) {
+      return this.prisma.user.update({
+        where: { id: existing.id },
+        data: { role: Role.ADMIN }
+      });
+    }
+
+    const bcrypt = require('bcryptjs');
+    const hash = await bcrypt.hash('Admin@123!', 10);
+    return this.prisma.user.create({
+      data: {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        role: Role.ADMIN,
+        passwordHash: hash
+      }
+    });
+  }
+
+  async removeAdminAccess(userId: string) {
+    // Reverts them to CUSTOMER
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { role: Role.CUSTOMER }
     });
   }
 }

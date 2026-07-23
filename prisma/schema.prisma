@@ -250,14 +250,36 @@ model Inquiry {
 // Store Settings
 // ---------------------------------------------------------
 model StoreSetting {
-  id                String   @id @default(cuid())
-  storeName         String
-  supportEmail      String
-  contactPhone      String
-  storeAddress      String
-  taxRate           Float
-  currency          String   @default("NGN")
-  enablePromotions  Boolean  @default(false)
-  promoBannerText   String?
-  updatedAt         DateTime @updatedAt
+  id               String   @id @default(uuid())
+  storeName        String
+  supportEmail     String
+  contactPhone     String?
+  storeAddress     String?
+  taxRate          Float    @default(0)
+  currency         String   @default("NGN")
+  enablePromotions Boolean  @default(false)
+  promoBannerText  String?
+  
+  // Payment Gateways Settings
+  stripePublicKey  String?
+  stripeSecretKey  String?
+  paypalClientId   String?
+  paymentMinTrans  Float    @default(0)
+  paymentMaxTrans  Float    @default(5000000)
+  paymentServiceFee Float   @default(0)
+
+  updatedAt        DateTime @updatedAt
+}
+
+// ---------------------------------------------------------
+// Shipping Zones
+// ---------------------------------------------------------
+model ShippingZone {
+  id        String   @id @default(uuid())
+  name      String
+  regions   String
+  baseRate  Float
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

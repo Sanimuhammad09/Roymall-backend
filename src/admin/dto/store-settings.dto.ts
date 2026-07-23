@@ -42,4 +42,37 @@ export class UpdateStoreSettingsDto {
   @IsOptional()
   @IsString()
   promoBannerText?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  stripePublicKey?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  stripeSecretKey?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  paypalClientId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  paymentMinTrans?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  paymentMaxTrans?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  paymentServiceFee?: number;
 }
