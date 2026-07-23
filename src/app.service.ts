@@ -15,7 +15,7 @@ export class AppService {
       _sum: { quantity: true },
       where: {
         order: {
-          status: { not: 'CANCELLED' }
+          status: 'DELIVERED'
         }
       }
     });
