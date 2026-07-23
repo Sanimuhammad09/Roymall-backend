@@ -40,7 +40,10 @@ export class UsersService {
   async findById(id: string) {
     return this.prisma.user.findUnique({ 
       where: { id },
-      include: { addresses: true }
+      include: { 
+        addresses: true,
+        wishlist: { include: { items: { include: { product: { include: { images: true } } } } } }
+      }
     });
   }
 
@@ -174,5 +177,65 @@ export class UsersService {
         isDefault: data.isDefault || false,
       },
     });
+  }
+
+  async updateAddress(userId: string, addressId: string, data: any) {
+    if (data.isDefault) {
+      await this.prisma.address.updateMany({
+        where: { userId },
+        data: { isDefault: false },
+      });
+    }
+    return this.prisma.address.updateMany({
+      where: { id: addressId, userId },
+      data: {
+        title: data.title,
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        zipCode: data.zipCode,
+        isDefault: data.isDefault,
+      },
+    });
+  }
+
+  async deleteAddress(userId: string, addressId: string) {
+    return this.prisma.address.deleteMany({
+      where: { id: addressId, userId },
+    });
+  }
+
+  async addToWishlist(userId: string, productId: string) {
+    const wishlist = await this.prisma.wishlist.upsert({
+      where: { userId },
+      create: { userId },
+      update: {},
+    });
+
+    try {
+      await this.prisma.wishlistItem.create({
+        data: {
+          wishlistId: wishlist.id,
+          productId,
+        },
+      });
+    } catch (e) {
+      // Ignore if it already exists
+    }
+    return this.findById(userId);
+  }
+
+  async removeFromWishlist(userId: string, productId: string) {
+    const wishlist = await this.prisma.wishlist.findUnique({ where: { userId } });
+    if (wishlist) {
+      await this.prisma.wishlistItem.deleteMany({
+        where: {
+          wishlistId: wishlist.id,
+          productId,
+        },
+      });
+    }
+    return this.findById(userId);
   }
 }

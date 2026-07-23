@@ -3,6 +3,7 @@ import {
   Get,
   Put,
   Post,
+  Delete,
   Body,
   UseGuards,
   Query,
@@ -109,5 +110,46 @@ export class UsersController {
     @Body() dto: any,
   ) {
     return this.usersService.addAddress(user.id, dto);
+  }
+
+  @Put('me/addresses/:id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update an address for the current user' })
+  async updateAddress(
+    @CurrentUser() user: any,
+    @Param('id') id: string,
+    @Body() dto: any,
+  ) {
+    return this.usersService.updateAddress(user.id, id, dto);
+  }
+
+  @Delete('me/addresses/:id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete an address for the current user' })
+  async deleteAddress(
+    @CurrentUser() user: any,
+    @Param('id') id: string,
+  ) {
+    return this.usersService.deleteAddress(user.id, id);
+  }
+
+  @Post('me/wishlist/:productId')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Add a product to wishlist' })
+  async addToWishlist(
+    @CurrentUser() user: any,
+    @Param('productId') productId: string,
+  ) {
+    return this.usersService.addToWishlist(user.id, productId);
+  }
+
+  @Delete('me/wishlist/:productId')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Remove a product from wishlist' })
+  async removeFromWishlist(
+    @CurrentUser() user: any,
+    @Param('productId') productId: string,
+  ) {
+    return this.usersService.removeFromWishlist(user.id, productId);
   }
 }
