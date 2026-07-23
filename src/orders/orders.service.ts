@@ -27,6 +27,8 @@ export class OrdersService {
           shippingCost: dto.shippingCost,
           shippingAddress: dto.shippingAddress,
           billingAddress: dto.shippingAddress,
+          paymentMethod: dto.paymentMethod,
+          paymentReference: dto.paymentReference,
           items: {
             create: dto.items.map((item) => ({
               productId: item.productId,

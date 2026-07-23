@@ -180,6 +180,8 @@ model Order {
   tax               Float
   shippingCost      Float
   status            OrderStatus  @default(PENDING)
+  paymentMethod     String?
+  paymentReference  String?
   
   shippingAddressId String?      // Can store JSON snapshot instead if address changes later
   billingAddressId  String?

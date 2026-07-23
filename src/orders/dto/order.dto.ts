@@ -43,6 +43,16 @@ export class CreateOrderDto {
   @ApiProperty()
   @IsNumber()
   total: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  paymentReference?: string;
 }
 
 export class UpdateOrderStatusDto {
