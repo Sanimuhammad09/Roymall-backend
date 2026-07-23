@@ -37,8 +37,11 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async findById(id: string): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { id } });
+  async findById(id: string) {
+    return this.prisma.user.findUnique({ 
+      where: { id },
+      include: { addresses: true }
+    });
   }
 
   async findByIdOrThrow(id: string): Promise<User> {
@@ -149,5 +152,27 @@ export class UsersService {
 
     if (!user) throw new NotFoundException('User not found');
     return user;
+  }
+
+  async addAddress(userId: string, data: any) {
+    if (data.isDefault) {
+      await this.prisma.address.updateMany({
+        where: { userId },
+        data: { isDefault: false },
+      });
+    }
+
+    return this.prisma.address.create({
+      data: {
+        userId,
+        title: data.title || null,
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        zipCode: data.zipCode,
+        isDefault: data.isDefault || false,
+      },
+    });
   }
 }

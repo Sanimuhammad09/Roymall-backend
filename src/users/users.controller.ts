@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Put,
+  Post,
   Body,
   UseGuards,
   Query,
@@ -98,5 +99,15 @@ export class UsersController {
     const updated = await this.usersService.updateStatus(id, isActive);
     const { passwordHash, ...safeUser } = updated;
     return safeUser;
+  }
+
+  @Post('me/addresses')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Add a new address for the current user' })
+  async addAddress(
+    @CurrentUser() user: any,
+    @Body() dto: any,
+  ) {
+    return this.usersService.addAddress(user.id, dto);
   }
 }
