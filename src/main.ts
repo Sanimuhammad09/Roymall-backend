@@ -23,7 +23,8 @@ async function bootstrap() {
         
         // Allow requests with no origin (mobile apps, curl, etc.)
         // Allow any localhost origin (any port) for development
-        if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin) || allowedOrigins.includes(origin)) {
+        // Allow any vercel deployment
+        if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin) || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
           callback(null, true);
         } else {
           callback(null, false);
