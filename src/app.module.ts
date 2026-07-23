@@ -16,7 +16,8 @@ import { AppointmentsModule } from './appointments/appointments.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
 import { AdminModule } from './admin/admin.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -44,6 +45,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    AppService,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
