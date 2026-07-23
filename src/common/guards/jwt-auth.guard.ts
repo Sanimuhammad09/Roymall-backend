@@ -33,7 +33,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
-    // If there's an error or no user, but the route is public, let them through
+    const request = context.switchToHttp().getRequest();
+    const hasAuthHeader = !!request.headers.authorization;
+
+    // If there is an auth header, they are TRYING to authenticate. If it fails, they should know.
+    if (hasAuthHeader && (err || !user)) {
+      throw err || new UnauthorizedException('Invalid or expired token. Please log in again.');
+    }
+
+    // If there's no auth header and the route is public, let them through
     if ((err || !user) && isPublic) {
       return null;
     }

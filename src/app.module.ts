@@ -18,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AppService } from './app.service';
     InquiriesModule,
     AdminModule,
     CloudinaryModule,
+    ReviewsModule,
   ],
   providers: [
     // Apply JWT guard globally — use @Public() to exempt routes
