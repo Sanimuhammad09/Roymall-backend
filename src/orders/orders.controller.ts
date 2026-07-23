@@ -38,13 +38,7 @@ export class OrdersController {
     return this.ordersService.findByUser(req.user.id);
   }
 
-  @Get(':id')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get specific order' })
-  async findOne(@Param('id') id: string, @Req() req: any) {
-    return this.ordersService.findOne(id, req.user.id);
-  }
-
+  // Admin routes MUST come before the generic :id route
   @Get('admin/all')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
@@ -83,5 +77,13 @@ export class OrdersController {
     @Body() dto: UpdateOrderStatusDto,
   ) {
     return this.ordersService.updateStatus(id, dto.status);
+  }
+
+  // Generic :id route MUST be last so it doesn't swallow admin/* routes
+  @Get(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get specific order' })
+  async findOne(@Param('id') id: string, @Req() req: any) {
+    return this.ordersService.findOne(id, req.user.id);
   }
 }
