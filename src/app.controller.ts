@@ -17,4 +17,10 @@ export class AppController {
   getMetrics() {
     return this.appService.getMetrics();
   }
+
+  @Public()
+  @Get('settings')
+  getSettings() {
+    return this.appService.getSettings();
+  }
 }

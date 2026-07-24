@@ -36,4 +36,19 @@ export class AppService {
       customerRating
     };
   }
+
+  async getSettings() {
+    return this.prisma.storeSetting.findFirst({
+      select: {
+        storeName: true,
+        supportEmail: true,
+        contactPhone: true,
+        storeAddress: true,
+        currency: true,
+        enablePromotions: true,
+        promoBannerText: true
+      }
+    });
+  }
 }
+
