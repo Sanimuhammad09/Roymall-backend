@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto, UpdateProductDto, ProductFilterDto } from './dto/product.dto';
 import { Prisma } from '@prisma/client';
@@ -118,8 +118,13 @@ export class ProductsService {
     }
     const product = await this.findById(productId);
     
-    const uploadPromises = files.map(file => this.cloudinaryService.uploadImage(file));
-    const results = await Promise.all(uploadPromises);
+    let results;
+    try {
+      const uploadPromises = files.map(file => this.cloudinaryService.uploadImage(file));
+      results = await Promise.all(uploadPromises);
+    } catch (error: any) {
+      throw new BadRequestException(error.message || 'Image upload failed');
+    }
 
     const imagesData = results.map(result => ({
       productId,
