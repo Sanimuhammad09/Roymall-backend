@@ -113,6 +113,9 @@ export class ProductsService {
   }
 
   async uploadImages(productId: string, files: Express.Multer.File[], isPrimary: boolean) {
+    if (!files || files.length === 0) {
+      throw new BadRequestException('No images provided or upload failed');
+    }
     const product = await this.findById(productId);
     
     const uploadPromises = files.map(file => this.cloudinaryService.uploadImage(file));
